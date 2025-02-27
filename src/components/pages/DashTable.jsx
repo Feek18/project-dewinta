@@ -32,6 +32,7 @@ const DashTable = () => {
   const [placement, setPlacement] = useState("left");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [email, setEmail] = useState(null);
+  const [name, setName] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
   const [isOn, setIsOn] = useState(false);
@@ -59,11 +60,25 @@ const DashTable = () => {
   };
 
   useEffect(() => {
-    const storedEmail = sessionStorage.getItem("email");
-    if (storedEmail && storedEmail !== email) {
-      setEmail(storedEmail);
-      setIsLogin(true);
-    }
+    const checkLogin = () => {
+      const storedEmail = sessionStorage.getItem("email");
+      const storedName = sessionStorage.getItem("name");
+      if (storedEmail) {
+        setEmail(storedEmail);
+        setIsLogin(true);
+      } else {
+        setEmail(null);
+        setIsLogin(false);
+      }
+
+      if (storedName) {
+        setName(storedName);
+      } else {
+        setName(null);
+      }
+    };
+
+    checkLogin();
   }, [email]); // Dependensi agar tidak menyebabkan infinite re-render
 
   const handleLogout = () => {
@@ -169,7 +184,7 @@ const DashTable = () => {
                     }}
                     className="transition-transform"
                     description={email}
-                    name="Just Feek Me"
+                    name={name}
                   />
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User Actions" variant="flat">

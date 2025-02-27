@@ -9,50 +9,49 @@ import {
   Button,
 } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { addToast } from "@heroui/react";
 
 const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    password_confirmation: "",
+    telp: "",
     address: "",
   });
+
   const [errors, setErrors] = useState({});
-  const [alertMessage, setAlertMessage] = useState(""); // ✅ Tambahkan state alert
-  const [alertColor, setAlertColor] = useState("success"); // ✅ Tambahkan state warna alert
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertColor, setAlertColor] = useState("success");
   const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ Tambahkan state loading
+
   const navigate = useNavigate();
 
-  // Fungsi reset form saat modal ditutup atau mode berubah
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-      address: "",
-    });
-    setErrors({});
-  };
-
+  // Reset form saat modal dibuka atau mode berubah
   useEffect(() => {
     if (isOpen) {
-      resetForm(); // Reset saat modal dibuka
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        telp: "",
+        address: "",
+      });
+      setErrors({});
     }
   }, [isOpen, mode]);
 
   // Fungsi validasi password
   const getPasswordError = (value) => {
-    if (value.length < 6) {
-      return "Password must be at least 6 characters";
-    }
-    if (!/[A-Z]/.test(value)) {
+    if (value.length < 6) return "Password must be at least 6 characters";
+    if (!/[A-Z]/.test(value))
       return "Password must have at least 1 uppercase letter";
-    }
-    if (!/[^a-zA-Z0-9]/.test(value)) {
+    if (!/[^a-zA-Z0-9]/.test(value))
       return "Password must have at least 1 special character";
-    }
     return null;
   };
 
@@ -67,19 +66,16 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
     }
 
     const passwordError = getPasswordError(formData.password);
-    if (passwordError) {
-      newErrors.password = passwordError;
-    }
+    if (passwordError) newErrors.password = passwordError;
 
     if (mode === "signup") {
-      if (!formData.name) {
-        newErrors.name = "Name is required";
-      }
-      if (!formData.phoneNumber) {
-        newErrors.phoneNumber = "Phone number is required";
-      }
-      if (!formData.address) {
-        newErrors.address = "Address is required";
+      if (!formData.name) newErrors.name = "Name is required";
+      if (!formData.telp) newErrors.telp = "Phone number is required";
+      if (!formData.address) newErrors.address = "Address is required";
+      if (!formData.password_confirmation) {
+        newErrors.password_confirmation = "Set your password like before!";
+      } else if (formData.password_confirmation !== formData.password) {
+        newErrors.password_confirmation = "Passwords do not match!";
       }
     }
 
@@ -87,38 +83,60 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Fungsi Login atau Signup
-  const handleAuth = (e) => {
+  // Fungsi handle login/signup
+  const handleAuth = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    if (!validateForm()) {
-      return; // Jika validasi gagal, hentikan proses submit
-    }
+    setLoading(true);
 
-    if (mode === "login") {
-      sessionStorage.setItem("email", formData.email);
-      sessionStorage.setItem("password", formData.password);
+    try {
+      if (mode === "login") {
+        // ✅ Request API login
+        const response = await axios.post("http://localhost:8000/api/login", {
+          email: formData.email,
+          password: formData.password,
+        });
 
-      setAlertColor("success");
-      setAlertMessage("Login berhasil! Anda akan diarahkan ke dashboard.");
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("email", formData.email);
+        sessionStorage.setItem("name", response.data.user.name);
+
+        addToast({
+          title: "Login successfully!!",
+          description: "Login has been successfully",
+          color: "success",
+        });
+
+        setTimeout(() => {
+          navigate("/"); // Ganti dengan halaman tujuan setelah login
+          window.location.reload(); // Agar header diperbarui
+        }, 1000);
+      } else {
+        // ✅ Request API register
+        await axios.post("http://localhost:8000/api/register", formData);
+
+        sessionStorage.setItem("name", formData.name);
+        console.log("name ada ga", name);
+
+        setAlertColor("success");
+        setAlertMessage("Akun berhasil dibuat! Silakan login.");
+        setShowAlert(true);
+
+        setTimeout(() => {
+          setShowAlert(false);
+          setMode("login");
+        }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
+      setAlertColor("danger");
+      setAlertMessage(error.response?.data?.message || "Something went wrong");
       setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/");
-      }, 500);
-    } else {
-      setAlertColor("success");
-      setAlertMessage("Akun berhasil dibuat! Silakan login.");
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
-        setMode("login"); // ✅ Ganti ke mode login setelah signup berhasil
-      }, 1000);
+    } finally {
+      setLoading(false);
+      onClose();
     }
-
-    onClose(); // ✅ Tutup modal setelah berhasil login/signup
   };
 
   return (
@@ -156,12 +174,12 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                     label="Phone Number"
                     placeholder="Enter your phone number"
                     variant="bordered"
-                    value={formData.phoneNumber}
+                    value={formData.telp}
                     onChange={(e) =>
-                      setFormData({ ...formData, phoneNumber: e.target.value })
+                      setFormData({ ...formData, telp: e.target.value })
                     }
-                    isInvalid={!!errors.phoneNumber}
-                    errorMessage={errors.phoneNumber}
+                    isInvalid={!!errors.telp}
+                    errorMessage={errors.telp}
                   />
                   <Input
                     label="Address"
@@ -176,7 +194,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                   />
                 </>
               )}
-
+              {/* Email */}
               <Input
                 label="Email"
                 placeholder="Enter your email"
@@ -188,6 +206,8 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                 isInvalid={!!errors.email}
                 errorMessage={errors.email}
               />
+
+              {/* Password */}
               <Input
                 label="Password"
                 placeholder="Enter your password"
@@ -200,18 +220,40 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                 isInvalid={!!errors.password}
                 errorMessage={errors.password}
               />
+              {mode === "signup" && (
+                <Input
+                  label="Confirm Password"
+                  placeholder="Confirm your password"
+                  type="password"
+                  variant="bordered"
+                  value={formData.password_confirmation}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      password_confirmation: e.target.value,
+                    })
+                  }
+                  isInvalid={!!errors.password_confirmation}
+                  errorMessage={errors.password_confirmation}
+                />
+              )}
             </ModalBody>
-            <ModalFooter className="flex flex-col">
-              <div className="flex justify-end items-center gap-3 w-full">
-                <div className="flex items-center gap-3">
-                  <Button color="danger" variant="flat" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button color="primary" type="submit">
-                    {mode === "login" ? "Sign in" : "Sign up"}
-                  </Button>
-                </div>
-              </div>
+            <ModalFooter>
+              <Button
+                color="danger"
+                variant="flat"
+                onClick={onClose}
+                disabled={loading}
+              >
+                Close
+              </Button>
+              <Button color="primary" type="submit" disabled={loading}>
+                {loading
+                  ? "Processing..."
+                  : mode === "login"
+                  ? "Sign in"
+                  : "Sign up"}
+              </Button>
             </ModalFooter>
           </form>
         </ModalContent>

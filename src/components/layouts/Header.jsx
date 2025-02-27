@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { addToast } from "@heroui/react";
 import {
   Navbar,
   NavbarBrand,
@@ -20,6 +21,7 @@ import {
 } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import ModalEdit from "../modals/ModalEdit";
+import { handleLogout } from "../../services/auth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +29,7 @@ const Header = () => {
   const [authMode, setAuthMode] = useState("login");
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState(null);
+  const [name, setName] = useState(sessionStorage.getItem("name") || "");
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,22 +40,35 @@ const Header = () => {
     { name: "Gallery", id: "gallery" },
   ];
 
-  // Perbaikan: Gunakan useEffect dengan kondisi yang benar
   useEffect(() => {
-    const storedEmail = sessionStorage.getItem("email");
-    if (storedEmail && storedEmail !== email) {
-      setEmail(storedEmail);
-      setIsLogin(true);
-    }
-  }, [email]); // Dependensi agar tidak menyebabkan infinite re-render
+    const checkLogin = () => {
+      const storedEmail = sessionStorage.getItem("email");
+      const storedName = sessionStorage.getItem("name");
+      if (storedEmail) {
+        setEmail(storedEmail);
+        setIsLogin(true);
+      } else {
+        setEmail(null);
+        setIsLogin(false);
+      }
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("password");
-    setIsLogin(false);
-    setEmail(null);
-    navigate("/");
-  };
+      if (storedName) {
+        setName(storedName);
+      } else {
+        setName(null);
+      }
+    };
+
+    checkLogin();
+    // Pastikan name juga diperbarui ketika ada perubahan di sessionStorage
+    const handleStorageChange = () => {
+      checkLogin();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <>
@@ -138,7 +154,7 @@ const Header = () => {
                   }}
                   className="transition-transform"
                   description={email}
-                  name="Just Feek Me"
+                  name={name}
                 />
               </DropdownTrigger>
               <DropdownMenu aria-label="User Actions" variant="flat">
@@ -147,7 +163,9 @@ const Header = () => {
                   <p className="font-bold">{email}</p>
                 </DropdownItem>
                 <DropdownItem asChild>
-                  <Link className="text-black" href="/dashboard">Dashboard</Link>
+                  <Link className="text-black" href="/dashboard">
+                    Dashboard
+                  </Link>
                 </DropdownItem>
                 <DropdownItem onClick={() => setIsOpen(true)}>
                   Edit Profile
@@ -156,7 +174,15 @@ const Header = () => {
                   className="text-danger-500"
                   key="logout"
                   color="danger"
-                  onClick={handleLogout}
+                  onClick={() =>
+                    handleLogout(
+                      setEmail,
+                      setIsLogin,
+                      setName,
+                      navigate,
+                      addToast
+                    )
+                  }
                 >
                   Log Out
                 </DropdownItem>
@@ -219,6 +245,7 @@ const Header = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode={authMode}
+        setMode={setAuthMode}
       />
       {/* Modal Edit */}
       <ModalEdit isOpen={isOpen} onClose={() => setIsOpen(false)} />
