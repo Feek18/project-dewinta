@@ -95,12 +95,18 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
       console.error(error);
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       } else {
         setAlertColor("danger");
         setAlertMessage(
           error.response?.data?.message || "Something went wrong"
         );
         setShowAlert(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } finally {
       setLoading(false);
