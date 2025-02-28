@@ -47,11 +47,8 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
   // Fungsi validasi password
   const getPasswordError = (value) => {
+    if (typeof value !== "string") return "Password is required";
     if (value.length < 6) return "Password must be at least 6 characters";
-    if (!/[A-Z]/.test(value))
-      return "Password must have at least 1 uppercase letter";
-    if (!/[^a-zA-Z0-9]/.test(value))
-      return "Password must have at least 1 special character";
     return null;
   };
 
@@ -124,7 +121,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         setShowAlert(true);
 
         setTimeout(() => {
-          setShowAlert(false);
+          setShowAlert(true);
           setMode("login");
         }, 1000);
       }
