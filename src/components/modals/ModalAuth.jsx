@@ -69,7 +69,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         });
 
         setTimeout(() => {
-          navigate("/");
+          window.location.href = "/";
         }, 1000); // Langsung navigate tanpa reload
       } else {
         // ✅ API Register
@@ -168,7 +168,9 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                     placeholder="Enter your name"
                     variant="bordered"
                     value={formData.name}
-                    onChange={handleInputChange}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.[0]}
                   />
