@@ -100,7 +100,7 @@ function App() {
 
       {/* reservation & product */}
       <section className="mt-28 px-16">
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex flex-col lg:flex-row lg:justify-center items-center gap-4">
           <Form
             className="flex flex-col"
             validationErrors={errors}
