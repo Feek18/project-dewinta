@@ -26,7 +26,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertColor, setAlertColor] = useState("success");
   const [showAlert, setShowAlert] = useState(false);
-  const [loading, setLoading] = useState(false); // ✅ Tambahkan state loading
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,51 +45,15 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
     }
   }, [isOpen, mode]);
 
-  // Fungsi validasi password
-  const getPasswordError = (value) => {
-    if (typeof value !== "string") return "Password is required";
-    if (value.length < 6) return "Password must be at least 6 characters";
-    return null;
-  };
-
-  // Fungsi validasi form
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    const passwordError = getPasswordError(formData.password);
-    if (passwordError) newErrors.password = passwordError;
-
-    if (mode === "signup") {
-      if (!formData.name) newErrors.name = "Name is required";
-      if (!formData.telp) newErrors.telp = "Phone number is required";
-      if (!formData.address) newErrors.address = "Address is required";
-      if (!formData.password_confirmation) {
-        newErrors.password_confirmation = "Set your password like before!";
-      } else if (formData.password_confirmation !== formData.password) {
-        newErrors.password_confirmation = "Passwords do not match!";
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   // Fungsi handle login/signup
   const handleAuth = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setLoading(true);
+    setErrors({}); // Reset error sebelum request
 
     try {
       if (mode === "login") {
-        // ✅ Request API login
+        // ✅ API Login
         const response = await axios.post("http://localhost:8000/api/login", {
           email: formData.email,
           password: formData.password,
@@ -100,24 +64,26 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         sessionStorage.setItem("name", response.data.user.name);
 
         addToast({
-          title: "Login successfully!!",
-          description: "Login has been successfully",
+          title: "Login Successfully!",
+          description: "You have logged in successfully.",
           color: "success",
         });
 
         setTimeout(() => {
-          navigate("/"); // Ganti dengan halaman tujuan setelah login
-          window.location.reload(); // Agar header diperbarui
+          navigate("/");
+          window.location.reload();
         }, 1000);
       } else {
-        // ✅ Request API register
-        await axios.post("http://localhost:8000/api/register", formData);
+        // ✅ API Register
+        const response = await axios.post(
+          "http://localhost:8000/api/register",
+          formData
+        );
 
-        sessionStorage.setItem("name", formData.name);
-        console.log("name ada ga", name);
+        sessionStorage.setItem("name", response.data.user.name);
 
         setAlertColor("success");
-        setAlertMessage("Akun berhasil dibuat! Silakan login.");
+        setAlertMessage("Account created successfully! Please log in.");
         setShowAlert(true);
 
         setTimeout(() => {
@@ -127,12 +93,17 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
       }
     } catch (error) {
       console.error(error);
-      setAlertColor("danger");
-      setAlertMessage(error.response?.data?.message || "Something went wrong");
-      setShowAlert(true);
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        setAlertColor("danger");
+        setAlertMessage(
+          error.response?.data?.message || "Something went wrong"
+        );
+        setShowAlert(true);
+      }
     } finally {
       setLoading(false);
-      onClose();
     }
   };
 
@@ -165,7 +136,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                       setFormData({ ...formData, name: e.target.value })
                     }
                     isInvalid={!!errors.name}
-                    errorMessage={errors.name}
+                    errorMessage={errors.name?.[0]}
                   />
                   <Input
                     label="Phone Number"
@@ -176,7 +147,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                       setFormData({ ...formData, telp: e.target.value })
                     }
                     isInvalid={!!errors.telp}
-                    errorMessage={errors.telp}
+                    errorMessage={errors.telp?.[0]}
                   />
                   <Input
                     label="Address"
@@ -187,7 +158,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                       setFormData({ ...formData, address: e.target.value })
                     }
                     isInvalid={!!errors.address}
-                    errorMessage={errors.address}
+                    errorMessage={errors.address?.[0]}
                   />
                 </>
               )}
@@ -201,7 +172,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 isInvalid={!!errors.email}
-                errorMessage={errors.email}
+                errorMessage={errors.email?.[0]}
               />
 
               {/* Password */}
@@ -215,7 +186,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 isInvalid={!!errors.password}
-                errorMessage={errors.password}
+                errorMessage={errors.password?.[0]}
               />
               {mode === "signup" && (
                 <Input
@@ -231,7 +202,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                     })
                   }
                   isInvalid={!!errors.password_confirmation}
-                  errorMessage={errors.password_confirmation}
+                  errorMessage={errors.password_confirmation?.[0]}
                 />
               )}
             </ModalBody>
