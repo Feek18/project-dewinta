@@ -53,7 +53,6 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
     try {
       if (mode === "login") {
-        // ✅ API Login
         const response = await axios.post("http://localhost:8000/api/login", {
           email: formData.email,
           password: formData.password,
@@ -71,8 +70,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
         setTimeout(() => {
           navigate("/");
-          window.location.reload();
-        }, 1000);
+        }, 1000); // Langsung navigate tanpa reload
       } else {
         // ✅ API Register
         const response = await axios.post(
@@ -93,17 +91,29 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
       }
     } catch (error) {
       console.error(error);
+
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+
+        const isEmptyInput = Object.keys(error.response.data.errors).every(
+          (field) =>
+            error.response.data.errors[field].some((msg) =>
+              msg.includes("required")
+            )
+        );
+
+        if (!isEmptyInput) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
       } else {
         setAlertColor("danger");
         setAlertMessage(
-          error.response?.data?.message || "Something went wrong"
+          error.response?.data?.message || "Invalid credentials!"
         );
         setShowAlert(true);
+
         setTimeout(() => {
           window.location.reload();
         }, 1500);
@@ -111,6 +121,26 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // contoh aja cuyy
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value, // Perbarui nilai input
+    }));
+
+    // Perbaiki reset error agar tidak menghambat input
+    setErrors((prevErrors) => {
+      if (prevErrors[name]) {
+        const updatedErrors = { ...prevErrors };
+        delete updatedErrors[name];
+        return updatedErrors;
+      }
+      return prevErrors;
+    });
   };
 
   return (
@@ -138,9 +168,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                     placeholder="Enter your name"
                     variant="bordered"
                     value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    onChange={handleInputChange}
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.[0]}
                   />
@@ -171,12 +199,11 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
               {/* Email */}
               <Input
                 label="Email"
+                name="email"
                 placeholder="Enter your email"
                 variant="bordered"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                value={formData.email || ""}
+                onChange={handleInputChange}
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.[0]}
               />
@@ -184,13 +211,12 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
               {/* Password */}
               <Input
                 label="Password"
+                name="password"
                 placeholder="Enter your password"
                 type="password"
                 variant="bordered"
                 value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                onChange={handleInputChange}
                 isInvalid={!!errors.password}
                 errorMessage={errors.password?.[0]}
               />

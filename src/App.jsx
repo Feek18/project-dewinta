@@ -211,7 +211,7 @@ function App() {
             <div className="bg-white shadow-md rounded-lg p-6 w-[330px]">
               {Array.isArray(films) && films.length > 0 ? (
                 films.map((film) => (
-                  <div key={film.id}>
+                  <div style={{ fontFamily: "Lora" }} key={film.id}>
                     <h2 className="text-lg font-bold text-gray-800">
                       {film.name}
                     </h2>
