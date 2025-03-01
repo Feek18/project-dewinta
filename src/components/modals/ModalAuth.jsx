@@ -30,7 +30,6 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
   const navigate = useNavigate();
 
-  // Reset form saat modal dibuka atau mode berubah
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -42,14 +41,15 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         address: "",
       });
       setErrors({});
+      setShowAlert(false); // Reset alert saat modal dibuka
     }
   }, [isOpen, mode]);
 
-  // Fungsi handle login/signup
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrors({}); // Reset error sebelum request
+    setErrors({});
+    setShowAlert(false);
 
     try {
       if (mode === "login") {
@@ -70,23 +70,29 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
         setTimeout(() => {
           window.location.href = "/";
-        }, 1000); // Langsung navigate tanpa reload
+        }, 1000);
       } else {
-        // ✅ API Register
+        // Register dan langsung login
         const response = await axios.post(
           "http://localhost:8000/api/register",
           formData
         );
 
+        // Simpan data ke sessionStorage untuk auto-login
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("email", formData.email);
         sessionStorage.setItem("name", response.data.user.name);
 
-        setAlertColor("success");
-        setAlertMessage("Account created successfully! Please log in.");
-        setShowAlert(true);
+        addToast({
+          title: "Registration Successful!",
+          description: "You have been registered and logged in successfully.",
+          color: "success",
+        });
 
+        // Tutup modal dan redirect ke halaman utama
         setTimeout(() => {
-          setShowAlert(true);
-          setMode("login");
+          onClose(); // Tutup modal
+          window.location.href = "/";
         }, 1000);
       }
     } catch (error) {
@@ -94,53 +100,34 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
-
-        const isEmptyInput = Object.keys(error.response.data.errors).every(
-          (field) =>
-            error.response.data.errors[field].some((msg) =>
-              msg.includes("required")
-            )
-        );
-
-        if (!isEmptyInput) {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        }
       } else {
         setAlertColor("danger");
         setAlertMessage(
           error.response?.data?.message || "Invalid credentials!"
         );
         setShowAlert(true);
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // contoh aja cuyy
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value, // Perbarui nilai input
+      [name]: value,
     }));
 
-    // Perbaiki reset error agar tidak menghambat input
-    setErrors((prevErrors) => {
-      if (prevErrors[name]) {
+    // Hapus error untuk field yang sedang diubah
+    if (errors[name]) {
+      setErrors((prevErrors) => {
         const updatedErrors = { ...prevErrors };
         delete updatedErrors[name];
         return updatedErrors;
-      }
-      return prevErrors;
-    });
+      });
+    }
   };
 
   return (
@@ -165,52 +152,46 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
                 <>
                   <Input
                     label="Full Name"
+                    name="name"
                     placeholder="Enter your name"
                     variant="bordered"
                     value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    onChange={handleInputChange}
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.[0]}
                   />
                   <Input
                     label="Phone Number"
+                    name="telp"
                     placeholder="Enter your phone number"
                     variant="bordered"
                     value={formData.telp}
-                    onChange={(e) =>
-                      setFormData({ ...formData, telp: e.target.value })
-                    }
+                    onChange={handleInputChange}
                     isInvalid={!!errors.telp}
                     errorMessage={errors.telp?.[0]}
                   />
                   <Input
                     label="Address"
+                    name="address"
                     placeholder="Enter your address"
                     variant="bordered"
                     value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
+                    onChange={handleInputChange}
                     isInvalid={!!errors.address}
                     errorMessage={errors.address?.[0]}
                   />
                 </>
               )}
-              {/* Email */}
               <Input
                 label="Email"
                 name="email"
                 placeholder="Enter your email"
                 variant="bordered"
-                value={formData.email || ""}
+                value={formData.email}
                 onChange={handleInputChange}
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.[0]}
               />
-
-              {/* Password */}
               <Input
                 label="Password"
                 name="password"
@@ -225,16 +206,12 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
               {mode === "signup" && (
                 <Input
                   label="Confirm Password"
+                  name="password_confirmation"
                   placeholder="Confirm your password"
                   type="password"
                   variant="bordered"
                   value={formData.password_confirmation}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      password_confirmation: e.target.value,
-                    })
-                  }
+                  onChange={handleInputChange}
                   isInvalid={!!errors.password_confirmation}
                   errorMessage={errors.password_confirmation?.[0]}
                 />
