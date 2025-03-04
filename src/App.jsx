@@ -18,66 +18,11 @@ import {
   Checkbox,
   Button,
 } from "@heroui/react";
-// import { addToast } from "@heroui/react";
-import { getLayananSalon } from "./services/service";
 import axios from "axios";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
   const [errors, setErrors] = React.useState({});
-  const [films, setFilms] = useState([]);
-  const [selectedFilm, setSelectedFilm] = useState("");
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const data = {
-      name: formData.get("name"),
-      telp: formData.get("telp"),
-      alamat: formData.get("alamat"),
-      email: formData.get("email"),
-      id_layanan: 6, // HARUS angka, sesuaikan dengan layanan yang dipilih
-    };
-
-    try {
-      const token = localStorage.getItem("token"); // Ambil token jika ada
-
-      const response = await fetch("http://localhost:8000/api/booking-salon", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "", // Tambahkan token jika diperlukan
-        },
-        body: JSON.stringify(data),
-        mode: "cors",
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        alert("✅ Booking berhasil!");
-        console.log("Success:", result);
-      } else {
-        alert("❌ Booking gagal: " + (result.message || "Terjadi kesalahan"));
-        console.error("Error:", result);
-      }
-    } catch (error) {
-      alert("❌ Gagal terhubung ke server!");
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    getLayananSalon((film) => {
-      if (Array.isArray(film)) {
-        setFilms(film);
-        setSelectedFilm(film[0]?.name || "");
-      } else {
-        setFilms([]);
-      }
-    });
-  }, []);
 
   return (
     <>
