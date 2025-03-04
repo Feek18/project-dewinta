@@ -29,7 +29,7 @@ const Header = () => {
   const [authMode, setAuthMode] = useState("login");
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState(null);
-  const [name, setName] = useState(sessionStorage.getItem("name") || "");
+  const [name, setName] = useState(localStorage.getItem("name") || "");
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,8 +42,8 @@ const Header = () => {
 
   useEffect(() => {
     const checkLogin = () => {
-      const storedEmail = sessionStorage.getItem("email");
-      const storedName = sessionStorage.getItem("name");
+      const storedEmail = localStorage.getItem("email");
+      const storedName = localStorage.getItem("name");
       if (storedEmail) {
         setEmail(storedEmail);
         setIsLogin(true);

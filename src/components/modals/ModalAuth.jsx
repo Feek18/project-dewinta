@@ -58,9 +58,9 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
           password: formData.password,
         });
 
-        sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("email", formData.email);
-        sessionStorage.setItem("name", response.data.user.name);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", formData.email);
+        localStorage.setItem("name", response.data.user.name);
 
         addToast({
           title: "Login Successfully!",
@@ -79,11 +79,11 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         );
 
         // Simpan data ke sessionStorage untuk auto-login
-        sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("email", formData.email);
-        sessionStorage.setItem("name", response.data.user.name);
-        sessionStorage.setItem("telp", response.data.user.telp);
-        sessionStorage.setItem("address", response.data.user.address);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", formData.email);
+        localStorage.setItem("name", response.data.user.name);
+        localStorage.setItem("telp", response.data.user.telp);
+        localStorage.setItem("address", response.data.user.address);
 
         addToast({
           title: "Registration Successful!",

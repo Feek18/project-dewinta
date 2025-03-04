@@ -21,10 +21,10 @@ const ModalEdit = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        name: sessionStorage.getItem("name") || "",
-        email: sessionStorage.getItem("email") || "",
-        telp: sessionStorage.getItem("telp") || "",
-        address: sessionStorage.getItem("address") || "",
+        name: localStorage.getItem("name") || "",
+        email: localStorage.getItem("email") || "",
+        telp: localStorage.getItem("telp") || "",
+        address: localStorage.getItem("address") || "",
       });
     }
   }, [isOpen]);
@@ -37,7 +37,7 @@ const ModalEdit = ({ isOpen, onClose }) => {
 
   const handleUpdateProfile = async () => {
     try {
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       const response = await axios.put(
         "http://localhost:8000/api/user/update",
@@ -50,10 +50,10 @@ const ModalEdit = ({ isOpen, onClose }) => {
       );
 
       // Perbarui sessionStorage dengan data yang baru
-      sessionStorage.setItem("name", response.data.user.name);
-      sessionStorage.setItem("email", response.data.user.email);
-      sessionStorage.setItem("telp", response.data.user.telp);
-      sessionStorage.setItem("address", response.data.user.address);
+      localStorage.setItem("name", response.data.user.name);
+      localStorage.setItem("email", response.data.user.email);
+      localStorage.setItem("telp", response.data.user.telp);
+      localStorage.setItem("address", response.data.user.address);
 
       alert("Profile updated successfully!");
       onClose(); // Tutup modal setelah update

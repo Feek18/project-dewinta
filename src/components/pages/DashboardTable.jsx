@@ -30,8 +30,8 @@ import { Alert } from "@heroui/react";
 const DashboardTable = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
-  const [email, setEmail] = useState(sessionStorage.getItem("email"));
-  const [name, setName] = useState(sessionStorage.getItem("name"));
+  const [email, setEmail] = useState(localStorage.getItem("email"));
+  const [name, setName] = useState(localStorage.getItem("name"));
   const [isOn, setIsOn] = useState(false);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
@@ -52,7 +52,7 @@ const DashboardTable = () => {
   }, [onOpen, onClose]);
 
   const handleLogout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     navigate("/");
   };
 

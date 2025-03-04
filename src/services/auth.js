@@ -9,7 +9,7 @@ export const handleLogout = async (
   addToast
 ) => {
   try {
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     if (token) {
       await axios.post(
@@ -19,9 +19,9 @@ export const handleLogout = async (
       );
     }
 
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("name");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
 
     setIsLogin(false);
     setEmail(null);

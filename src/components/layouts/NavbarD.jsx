@@ -50,13 +50,14 @@ export const SearchIcon = ({
 const NavbarD = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [email, setEmail] = useState(sessionStorage.getItem("email"));
-  const [name, setName] = useState(sessionStorage.getItem("name"));
+  const [email, setEmail] = useState(localStorage.getItem("email"));
+  const [name, setName] = useState(localStorage.getItem("name"));
   const [isOn, setIsOn] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("password");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
     setIsLogin(false);
     setEmail(null);
     navigate("/");
