@@ -56,12 +56,6 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    getLayananSalon(setDatas);
-  }, []);
-
-  console.log("State Datas:", datas);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
@@ -84,7 +78,7 @@ const Dashboard = () => {
                     style={{ fontFamily: "Lora" }}
                     className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-semibold"
                   >
-                    Hello {name}, Welcome to Dashboard !! 
+                    Hello {name}, Welcome to Dashboard !!
                   </h1>
                 </div>
               </div>

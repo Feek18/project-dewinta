@@ -26,8 +26,9 @@ import { getLayananSalon } from "../../services/service";
 import Sidebar from "../layouts/Sidebar";
 import NavbarD from "../layouts/NavbarD";
 import { Alert } from "@heroui/react";
+import CardProduct from "../fragments/CardProduct";
 
-const Dashboard = () => {
+const DashboardServices = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [email, setEmail] = useState(localStorage.getItem("email"));
@@ -84,8 +85,11 @@ const Dashboard = () => {
                     style={{ fontFamily: "Lora" }}
                     className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-semibold"
                   >
-                    Hello {name}, Welcome to Dashboard !! 
+                    Service that available for you
                   </h1>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8">
+                    <CardProduct />
+                  </div>
                 </div>
               </div>
             </div>
@@ -96,4 +100,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardServices;

@@ -56,12 +56,6 @@ const DashboardTable = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    getLayananSalon(setDatas);
-  }, []);
-
-  console.log("State Datas:", datas);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>

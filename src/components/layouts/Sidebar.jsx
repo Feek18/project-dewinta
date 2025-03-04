@@ -235,7 +235,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
                   );
                 }}
               </SidebarLinkGroup>
-              {/* Dashboard */}
+              {/* Services */}
               <SidebarLinkGroup
                 activecondition={
                   pathname === "/" || pathname.includes("dashboard")
@@ -244,18 +244,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
-                      <a
-                        href="#0"
+                      <NavLink
+                        to="/dashboard-services"
                         className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                          pathname === "/" || pathname.includes("dashboard")
+                          pathname === "/dashboard-table" ||
+                          pathname.includes("dashboard-table")
                             ? ""
                             : "hover:text-gray-900 dark:hover:text-white"
                         }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleClick();
-                          setSidebarExpanded(true);
-                        }}
+                        onClick={() => setSidebarExpanded(true)}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
@@ -279,7 +276,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
                             </span>
                           </div>
                         </div>
-                      </a>
+                      </NavLink>
                     </React.Fragment>
                   );
                 }}

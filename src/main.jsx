@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/pages/Dashboard.jsx";
 import TableCol from "./components/fragments/TableCol.jsx";
 import DashboardTable from "./components/pages/DashboardTable.jsx";
+import DashboardServices from "./components/pages/DashboardServices.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard-table",
     element: <DashboardTable />,
+  },
+  {
+    path: "/dashboard-services",
+    element: <DashboardServices />,
   },
 ]);
 
