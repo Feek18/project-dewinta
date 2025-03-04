@@ -82,6 +82,8 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         sessionStorage.setItem("token", response.data.token);
         sessionStorage.setItem("email", formData.email);
         sessionStorage.setItem("name", response.data.user.name);
+        sessionStorage.setItem("telp", response.data.user.telp);
+        sessionStorage.setItem("address", response.data.user.address);
 
         addToast({
           title: "Registration Successful!",
@@ -93,6 +95,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         setTimeout(() => {
           onClose(); // Tutup modal
           setMode("login");
+          window.location.href = "/";
         }, 1000);
       }
     } catch (error) {

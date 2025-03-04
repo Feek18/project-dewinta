@@ -18,7 +18,6 @@ const ModalEdit = ({ isOpen, onClose }) => {
     address: "",
   });
 
-  // Ambil data user dari sessionStorage saat modal dibuka
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -30,13 +29,12 @@ const ModalEdit = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // Fungsi untuk menangani input perubahan
+  // Fungsi untuk menangani perubahan input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Fungsi untuk update data user
   const handleUpdateProfile = async () => {
     try {
       const token = sessionStorage.getItem("token");
@@ -51,7 +49,7 @@ const ModalEdit = ({ isOpen, onClose }) => {
         }
       );
 
-      // Perbarui sessionStorage dengan data baru
+      // Perbarui sessionStorage dengan data yang baru
       sessionStorage.setItem("name", response.data.user.name);
       sessionStorage.setItem("email", response.data.user.email);
       sessionStorage.setItem("telp", response.data.user.telp);
@@ -85,6 +83,13 @@ const ModalEdit = ({ isOpen, onClose }) => {
             variant="bordered"
           />
           <Input
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            variant="bordered"
+          />
+          <Input
             label="Phone Number"
             name="telp"
             value={formData.telp}
@@ -97,14 +102,6 @@ const ModalEdit = ({ isOpen, onClose }) => {
             value={formData.address}
             onChange={handleInputChange}
             variant="bordered"
-          />
-          <Input
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            variant="bordered"
-            disabled // Email tidak bisa diubah
           />
         </ModalBody>
         <ModalFooter>
