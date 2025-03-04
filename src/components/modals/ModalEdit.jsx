@@ -18,16 +18,35 @@ const ModalEdit = ({ isOpen, onClose }) => {
     address: "",
   });
 
+  // Fetch data user dari database saat modal dibuka
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        name: localStorage.getItem("name") || "",
-        email: localStorage.getItem("email") || "",
-        telp: localStorage.getItem("telp") || "",
-        address: localStorage.getItem("address") || "",
-      });
+      fetchUserData();
     }
   }, [isOpen]);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Ambil token dari localStorage
+
+      const response = await axios.get("http://localhost:8000/api/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Set nilai input dengan data dari API
+      setFormData({
+        name: response.data.name || "",
+        email: response.data.email || "",
+        telp: response.data.telp || "",
+        address: response.data.address || "",
+      });
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      alert("Failed to fetch user data!");
+    }
+  };
 
   // Fungsi untuk menangani perubahan input
   const handleInputChange = (e) => {
@@ -49,12 +68,6 @@ const ModalEdit = ({ isOpen, onClose }) => {
         }
       );
 
-      // Perbarui sessionStorage dengan data yang baru
-      localStorage.setItem("name", response.data.user.name);
-      localStorage.setItem("email", response.data.user.email);
-      localStorage.setItem("telp", response.data.user.telp);
-      localStorage.setItem("address", response.data.user.address);
-
       alert("Profile updated successfully!");
       onClose(); // Tutup modal setelah update
     } catch (error) {
@@ -75,39 +88,39 @@ const ModalEdit = ({ isOpen, onClose }) => {
           Update Profile
         </ModalHeader>
         <ModalBody>
-          <Input
-            label="Full Name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            variant="bordered"
-          />
-          <Input
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            variant="bordered"
-          />
-          <Input
-            label="Phone Number"
-            name="telp"
-            value={formData.telp}
-            onChange={handleInputChange}
-            variant="bordered"
-          />
-          <Input
-            label="Address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            variant="bordered"
-          />
+          <>
+            <Input
+              label="Full Name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              variant="bordered"
+            />
+            <Input
+              label="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              variant="bordered"
+            />
+            <Input
+              label="Phone Number"
+              name="telp"
+              value={formData.telp}
+              onChange={handleInputChange}
+              variant="bordered"
+            />
+            <Input
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              variant="bordered"
+            />
+          </>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onPress={handleUpdateProfile}>
-            Save
-          </Button>
+          <Button color="primary" onPress={handleUpdateProfile}>Save</Button>
           <Button color="danger" variant="flat" onPress={onClose}>
             Close
           </Button>
