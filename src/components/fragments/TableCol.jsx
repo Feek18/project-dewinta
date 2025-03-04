@@ -224,7 +224,9 @@ const TableCol = () => {
       case "alamat":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">Buenos Aries, Argentina</p>
+            <p className="text-bold text-sm capitalize">
+              Buenos Aries, Argentina
+            </p>
             <p className="text-bold text-sm capitalize text-default-400">
               {user.team}
             </p>
@@ -233,7 +235,9 @@ const TableCol = () => {
       case "layanan":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">Jasa Web/App Developer</p>
+            <p className="text-bold text-sm capitalize">
+              Jasa Web/App Developer
+            </p>
             <p className="text-bold text-sm capitalize text-default-400">
               {user.team}
             </p>
@@ -285,27 +289,29 @@ const TableCol = () => {
     }
   }, []);
   return (
-    <Table aria-label="Example table with custom cells">
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={users}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className="w-full flex overflow-x-auto">
+      <Table className="w-[1150px] rounded-none">
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={users}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

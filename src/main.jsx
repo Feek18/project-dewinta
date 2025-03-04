@@ -6,7 +6,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./components/pages/Dashboard.jsx";
 import TableCol from "./components/fragments/TableCol.jsx";
-import DashTable from "./components/pages/DashTable.jsx";
+import DashboardTable from "./components/pages/DashboardTable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard-table",
-    element: <DashTable />,
+    element: <DashboardTable />,
   },
 ]);
 

@@ -92,7 +92,7 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         // Tutup modal dan redirect ke halaman utama
         setTimeout(() => {
           onClose(); // Tutup modal
-          window.location.href = "/";
+          setMode("login");
         }, 1000);
       }
     } catch (error) {

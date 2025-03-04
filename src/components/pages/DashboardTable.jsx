@@ -27,7 +27,7 @@ import Sidebar from "../layouts/Sidebar";
 import NavbarD from "../layouts/NavbarD";
 import { Alert } from "@heroui/react";
 
-const Dashboard = () => {
+const DashboardTable = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [email, setEmail] = useState(sessionStorage.getItem("email"));
@@ -81,11 +81,12 @@ const Dashboard = () => {
                 {/* Left: Title */}
                 <div className="mb-4 sm:mb-0">
                   <h1
-                    style={{ fontFamily: "Lora" }}
-                    className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-semibold"
+                    style={{ fontFamily: "PLayfair Display" }}
+                    className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-semibold mb-4"
                   >
-                    Hello {name}, Welcome to Dashboard !! 
+                    List Booking
                   </h1>
+                  <TableCol />
                 </div>
               </div>
             </div>
@@ -96,4 +97,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardTable;

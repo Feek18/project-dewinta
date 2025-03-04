@@ -2,7 +2,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <section id="about" className="mt-14 lg:mt-36">
+    <section id="about" className="mt-14 lg:mt-24">
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row justify-evenly items-center">
           <img
