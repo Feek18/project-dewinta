@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "../fragments/Image";
+import { getImage } from "../../services/image";
 
 const Gallery = () => {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getImage((data) => {
+      console.log("Data dari API:", data); // Debugging
+      setImages(data);
+      setLoading(false);
+    });
+  }, []);
   return (
     <section id="gallery" className="mt-14 lg:mt-28">
       <div className="text-center">
@@ -21,46 +32,50 @@ const Gallery = () => {
       </div>
 
       <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-        <Image
-          c={"rounded-lg col-span-1 row-span-2 object-cover w-full h-full"}
-          src="./public/img/hero.png"
-          alt="Beautiful Landscape 1"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g1.jpg"
-          alt="Beautiful Landscape 2"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g2.jpg"
-          alt="Beautiful Landscape 3"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g3.jpg"
-          alt="Beautiful Landscape 3"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g4.jpg"
-          alt="Beautiful Landscape 3"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g5.jpg"
-          alt="Beautiful Landscape 3"
-        />
-        <Image
-          c={"rounded-lg col-span-1 row-span-2 object-cover w-full h-full"}
-          src="./public/img/g6.jpg"
-          alt="Beautiful Landscape 3"
-        />
-        <Image
-          c={"rounded-lg col-span-1 object-cover w-full h-full"}
-          src="./public/img/g7.jpg"
-          alt="Beautiful Landscape 3"
-        />
+        {images.length > 0 && (
+          <>
+            <Image
+              c={"rounded-lg col-span-1 row-span-2 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[10].image_path}`}
+              alt="Beautiful Landscape 1"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[4].image_path}`}
+              alt="Beautiful Landscape 2"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[5].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[6].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[7].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[8].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+            <Image
+              c={"rounded-lg col-span-1 row-span-2 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[9].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+            <Image
+              c={"rounded-lg col-span-1 object-cover w-full h-full"}
+              src={`http://localhost:8000/storage/${images[3].image_path}`}
+              alt="Beautiful Landscape 3"
+            />
+          </>
+        )}
       </div>
     </section>
   );
