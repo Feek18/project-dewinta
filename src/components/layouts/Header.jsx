@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { addToast } from "@heroui/react";
+import { addToast, Avatar } from "@heroui/react";
 import {
   Navbar,
   NavbarBrand,
@@ -32,6 +32,19 @@ const Header = () => {
   const [name, setName] = useState(localStorage.getItem("name") || "");
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 760);
+
+  // Handle perubahan ukuran layar
+  useEffect(() => {
+    const handleResize = () => {
+      const newIsMobile = window.innerWidth < 760;
+      setIsMobile(newIsMobile);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const menuItems = [
     { name: "Home", id: "home" },
@@ -81,13 +94,13 @@ const Header = () => {
           <NavbarBrand className="flex items-center gap-24">
             <div className="flex items-center gap-2">
               <img
-                className="h-12 auto"
+                className="h-10 lg:h-12 auto"
                 src="./public/img/logo.png"
                 alt="Logo"
               />
               <p
                 style={{ fontFamily: "Parisienne" }}
-                className="font-bold text-3xl"
+                className="font-bold text-2xl lg:text-4xl"
               >
                 Dewinta Makeup
               </p>
@@ -144,50 +157,99 @@ const Header = () => {
           </NavbarContent>
         ) : (
           <div className="flex items-center gap-4">
-            <Dropdown>
-              <DropdownTrigger>
-                <User
-                  as="button"
-                  avatarProps={{
-                    isBordered: true,
-                    src: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-                  }}
-                  className="transition-transform"
-                  description={email}
-                  name={name}
-                />
-              </DropdownTrigger>
-              <DropdownMenu aria-label="User Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                  <p className="font-bold">Signed in as</p>
-                  <p className="font-bold">{email}</p>
-                </DropdownItem>
-                <DropdownItem asChild>
-                  <Link className="text-black" href="/dashboard">
-                    Dashboard
-                  </Link>
-                </DropdownItem>
-                <DropdownItem onClick={() => setIsOpen(true)}>
-                  Edit Profile
-                </DropdownItem>
-                <DropdownItem
-                  className="text-danger-500"
-                  key="logout"
-                  color="danger"
-                  onClick={() =>
-                    handleLogout(
-                      setEmail,
-                      setIsLogin,
-                      setName,
-                      navigate,
-                      addToast
-                    )
-                  }
-                >
-                  Log Out
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <>
+              {isMobile ? (
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Avatar
+                      as="button"
+                      isBordered
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                      className="transition-transform border-yellow-500"
+                      color="warning"
+                      description={email}
+                      name={name}
+                    />
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="User Actions" variant="flat">
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                      <p className="font-bold">Signed in as</p>
+                      <p className="font-bold">{email}</p>
+                    </DropdownItem>
+                    <DropdownItem asChild>
+                      <Link className="text-black" href="/dashboard">
+                        Dashboard
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem onClick={() => setIsOpen(true)}>
+                      Edit Profile
+                    </DropdownItem>
+                    <DropdownItem
+                      className="text-danger-500"
+                      key="logout"
+                      color="danger"
+                      onClick={() =>
+                        handleLogout(
+                          setEmail,
+                          setIsLogin,
+                          setName,
+                          navigate,
+                          addToast
+                        )
+                      }
+                    >
+                      Log Out
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              ) : (
+                <Dropdown>
+                  <DropdownTrigger>
+                    <User
+                      as="button"
+                      avatarProps={{
+                        isBordered: true,
+                        src: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+                      }}
+                      className="transition-transform border-yellow-500"
+                      color="warning"
+                      description={email}
+                      name={name}
+                    />
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="User Actions" variant="flat">
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                      <p className="font-bold">Signed in as</p>
+                      <p className="font-bold">{email}</p>
+                    </DropdownItem>
+                    <DropdownItem asChild>
+                      <Link className="text-black" href="/dashboard">
+                        Dashboard
+                      </Link>
+                    </DropdownItem>
+                    <DropdownItem onClick={() => setIsOpen(true)}>
+                      Edit Profile
+                    </DropdownItem>
+                    <DropdownItem
+                      className="text-danger-500"
+                      key="logout"
+                      color="danger"
+                      onClick={() =>
+                        handleLogout(
+                          setEmail,
+                          setIsLogin,
+                          setName,
+                          navigate,
+                          addToast
+                        )
+                      }
+                    >
+                      Log Out
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+            </>
           </div>
         )}
 
@@ -211,32 +273,36 @@ const Header = () => {
               </Link>
             </NavbarMenuItem>
           ))}
-          <div className="flex items-center gap-3">
-            <NavbarItem>
-              <Button
-                style={{ fontFamily: "Playfair Display" }}
-                className="bg-[#A68A64] text-md text-white rounded-none px-8"
-                onClick={() => {
-                  setAuthMode("login");
-                  setIsModalOpen(true);
-                }}
-              >
-                Login
-              </Button>
-            </NavbarItem>
-            <NavbarItem>
-              <Button
-                onClick={() => {
-                  setAuthMode("signup");
-                  setIsModalOpen(true);
-                }}
-                style={{ fontFamily: "Playfair Display" }}
-                className="bg-transparent text-md rounded-none"
-              >
-                Sign Up
-              </Button>
-            </NavbarItem>
-          </div>
+          {!isLogin ? (
+            <div className="flex items-center gap-3">
+              <NavbarItem>
+                <Button
+                  style={{ fontFamily: "Playfair Display" }}
+                  className="bg-[#A68A64] text-md text-white rounded-none px-8"
+                  onClick={() => {
+                    setAuthMode("login");
+                    setIsModalOpen(true);
+                  }}
+                >
+                  Login
+                </Button>
+              </NavbarItem>
+              <NavbarItem>
+                <Button
+                  onClick={() => {
+                    setAuthMode("signup");
+                    setIsModalOpen(true);
+                  }}
+                  style={{ fontFamily: "Playfair Display" }}
+                  className="bg-transparent text-md rounded-none"
+                >
+                  Sign Up
+                </Button>
+              </NavbarItem>
+            </div>
+          ) : (
+            <span className="hidden">Anda berhasil login...</span>
+          )}
         </NavbarMenu>
       </Navbar>
 

@@ -8,7 +8,7 @@ import {
   Avatar,
   Input,
 } from "@heroui/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModalEdit from "../modals/ModalEdit";
 
 export const SearchIcon = ({
@@ -134,7 +134,9 @@ const NavbarD = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
                     <p className="font-semibold">Signed in as</p>
                     <p className="font-semibold">{email}</p>
                   </DropdownItem>
-                  <DropdownItem>Dashboard</DropdownItem>
+                  <DropdownItem>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </DropdownItem>
                   <DropdownItem onClick={() => setIsOn(true)}>
                     Edit Profile
                   </DropdownItem>
