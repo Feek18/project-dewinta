@@ -134,8 +134,10 @@ const NavbarD = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
                     <p className="font-semibold">Signed in as</p>
                     <p className="font-semibold">{email}</p>
                   </DropdownItem>
-                  <DropdownItem>
-                    <Link to="/dashboard">Dashboard</Link>
+                  <DropdownItem
+                    onClick={() => (window.location.href = "/dashboard")}
+                  >
+                    Dashboard
                   </DropdownItem>
                   <DropdownItem onClick={() => setIsOn(true)}>
                     Edit Profile

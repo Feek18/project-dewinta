@@ -176,10 +176,11 @@ const Header = () => {
                       <p className="font-bold">Signed in as</p>
                       <p className="font-bold">{email}</p>
                     </DropdownItem>
-                    <DropdownItem asChild>
-                      <Link className="text-black" href="/dashboard">
-                        Dashboard
-                      </Link>
+                    <DropdownItem
+                      asChild
+                      onClick={() => (window.location.href = "/dashboard")}
+                    >
+                      Dashboard
                     </DropdownItem>
                     <DropdownItem onClick={() => setIsOpen(true)}>
                       Edit Profile
@@ -222,10 +223,11 @@ const Header = () => {
                       <p className="font-bold">Signed in as</p>
                       <p className="font-bold">{email}</p>
                     </DropdownItem>
-                    <DropdownItem asChild>
-                      <Link className="text-black" href="/dashboard">
-                        Dashboard
-                      </Link>
+                    <DropdownItem
+                      asChild
+                      onClick={() => (window.location.href = "/dashboard")}
+                    >
+                      Dashboard
                     </DropdownItem>
                     <DropdownItem onClick={() => setIsOpen(true)}>
                       Edit Profile
