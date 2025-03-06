@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../services/image";
+import useTranslations from "../../services/useTranslations";
 
 const Promo = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
 
   useEffect(() => {
     getImage((data) => {
-      console.log("Data dari API:", data); // Debugging
+      // console.log("Data dari API:", data); // Debugging
       setImages(data);
       setLoading(false);
     });
@@ -30,17 +32,16 @@ const Promo = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-5xl font-bold"
             >
-              Special Promo Package for You!
+              {text("promo_01")}
             </h2>
             <p style={{ fontFamily: "Lora" }} className="mt-3 text-xl">
-              Get up to 50% off select makeup products and discover exclusive
-              packages designed specifically for your perfect look!
+              {text("promo_02")}
             </p>
             <button
               style={{ fontFamily: "Playfair Display" }}
               className="mt-4 px-8 py-2 bg-[#A68A64] text-white"
             >
-              Reserv Now
+              {text("promo_03")}
             </button>
           </div>
         </section>

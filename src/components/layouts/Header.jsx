@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { addToast, Avatar } from "@heroui/react";
 import {
   Navbar,
@@ -22,6 +22,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import ModalEdit from "../modals/ModalEdit";
 import { handleLogout } from "../../services/auth";
+import { cn } from "@heroui/react";
+import useTranslations from "../../services/useTranslations";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,6 +35,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 760);
+  const { currentLanguage, changeLanguage } = useTranslations();
 
   // Handle perubahan ukuran layar
   useEffect(() => {
@@ -83,6 +86,13 @@ const Header = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
+  const handleChangeLanguage = (lang) => {
+    console.log(`Mengubah bahasa ke: ${lang}`);
+    changeLanguage(lang);
+  };
+
+  console.log("Header dirender ulang! Bahasa saat ini:", currentLanguage);
+
   return (
     <>
       <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll>
@@ -127,6 +137,49 @@ const Header = () => {
           </NavbarBrand>
         </NavbarContent>
 
+        <Dropdown>
+          <DropdownTrigger className="bg-white">
+            <Button
+              startContent={
+                <img
+                  src={`/img/${
+                    currentLanguage === "id" ? "indonesia" : "english"
+                  }.png`}
+                  alt="Language Flag"
+                  className="w-5 h-5"
+                />
+              }
+            >
+              {currentLanguage === "id" ? "Indonesia" : "English"}
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Dropdown menu with icons" variant="faded">
+            <DropdownItem
+              startContent={
+                <img
+                  src="/img/english.png"
+                  alt="English Flag"
+                  className="w-5 h-5"
+                />
+              }
+              onPress={() => handleChangeLanguage("en")}
+            >
+              English
+            </DropdownItem>
+            <DropdownItem
+              startContent={
+                <img
+                  src="/img/indonesia.png"
+                  alt="Indonesia Flag"
+                  className="w-5 h-5"
+                />
+              }
+              onPress={() => handleChangeLanguage("id")}
+            >
+              Indonesia
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         {/* Jika belum login */}
         {!isLogin ? (
           <NavbarContent className="hidden sm:flex gap-2" justify="end">

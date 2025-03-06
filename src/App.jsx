@@ -19,10 +19,12 @@ import {
   Button,
 } from "@heroui/react";
 import axios from "axios";
+import useTranslations from "./services/useTranslations";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
   const [errors, setErrors] = React.useState({});
+  const { text, currentLanguage } = useTranslations(); // Ambil `text` dan `currentLanguage`
 
   return (
     <>
@@ -47,7 +49,7 @@ function App() {
                 style={{ fontFamily: "Playfair Display" }}
                 className="text-4xl font-semibold leading-tight mb-8"
               >
-                Take your reservation now!!
+                {text("reservation_01")}
               </h1>
 
               {/* Grid untuk form */}
@@ -61,10 +63,10 @@ function App() {
                         return "Please enter your name";
                       return errors.name;
                     }}
-                    label="Name"
+                    label={text("name")}
                     labelPlacement="outside"
                     name="name"
-                    placeholder="Enter your name"
+                    placeholder={text("enter_your_name")}
                   />
 
                   <Input
@@ -75,11 +77,25 @@ function App() {
                       if (validationDetails.typeMismatch)
                         return "Please enter a valid phone number";
                     }}
-                    label="No. Telp"
+                    label={text("telp")}
                     labelPlacement="outside"
                     name="telp"
                     placeholder="Enter your phone number"
                     type="number"
+                  />
+                  <Input
+                    isRequired
+                    // errorMessage={({ validationDetails }) => {
+                    //   if (validationDetails.valueMissing)
+                    //     return "Please enter your telp";
+                    //   if (validationDetails.typeMismatch)
+                    //     return "Please enter a valid phone number";
+                    // }}
+                    label={text("date_booking")}
+                    labelPlacement="outside"
+                    name="date"
+                    placeholder="Enter your phone number"
+                    type="date"
                   />
                 </div>
 
@@ -93,7 +109,7 @@ function App() {
                       if (validationDetails.typeMismatch)
                         return "Please enter a valid email address";
                     }}
-                    label="Email"
+                    label={text("email")}
                     labelPlacement="outside"
                     name="email"
                     placeholder="Enter your email"
@@ -110,7 +126,7 @@ function App() {
                     label="Address"
                     labelPlacement="outside"
                     name="alamat"
-                    placeholder="Enter your address"
+                    placeholder={text("address")}
                     minLength={10}
                   />
                 </div>
@@ -124,7 +140,7 @@ function App() {
                 className="w-1/2 md:w-1/4 bg-[#A68A64] text-white rounded-none"
                 type="submit"
               >
-                Submit
+                {text("submit")}
               </Button>
             </div>
           </Form>

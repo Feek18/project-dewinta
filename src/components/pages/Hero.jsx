@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../services/image";
+import useTranslations from "../../services/useTranslations";
 
 const Hero = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { text, currentLanguage } = useTranslations(); // Ambil `text` dan `currentLanguage`
 
   useEffect(() => {
     getImage((data) => {
-      console.log("Data dari API:", data); // Debugging
+      // console.log("Data dari API:", data);
       setImages(data);
       setLoading(false);
     });
-  }, []);
+  }, [currentLanguage]);
 
   return (
     <section id="home" className="mt-14 lg:mt-24">
@@ -23,17 +25,17 @@ const Hero = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-6xl md:text-8xl font-semibold leading-tight"
             >
-              Look Beautiful,{" "}
-              <span className="text-[#A68A64] font-bold">Be Confident</span>{" "}
-              Every Day
+              {text("hero_01")}, {" "}
+              <span className="text-[#A68A64] font-bold">
+                {text("hero_02")}
+              </span>{" "}
+              {text("hero_03")}
             </h1>
             <p
               style={{ fontFamily: "Lora" }}
               className="text-lg mt-4 text-gray-700"
             >
-              Bring your dream makeup look to life with a professional touch.
-              From natural to glamorous makeup, we are ready to give you the
-              best for every special moment!
+              {text("hero_04")}
             </p>
           </div>
 

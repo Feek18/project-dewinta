@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getImage } from "../../services/image";
+import useTranslations from "../../services/useTranslations";
 
 const About = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
 
   useEffect(() => {
     getImage((data) => {
-      console.log("Data dari API:", data); // Debugging
+      // console.log("Data dari API:", data); // Debugging
       setImages(data);
       setLoading(false);
     });
@@ -28,19 +30,13 @@ const About = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-5xl font-semibold leading-tight"
             >
-              Beauty transformations that bring out your best self
+              {text("about_01")}
             </h1>
             <p
               style={{ fontFamily: "Lora" }}
               className="text-md mt-4 text-gray-700"
             >
-              At Dewinta Makeup, we believe that makeup is not just makeup, but
-              an art that reinforces confidence and expresses personality. We
-              provide professional makeup services for various needs, from
-              natural daily makeup to glamorous looks for special events. With
-              high-quality products and application techniques that suit your
-              facial character, we are ready to help you look stunning in every
-              precious moment. Discover the perfect touch of beauty with us!
+              {text("about_02")}
               💄✨
             </p>
           </div>

@@ -1,6 +1,8 @@
 import React from "react";
+import useTranslations from "../../services/useTranslations";
 
 const Whyus = () => {
+  const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
   return (
     <section>
       <div className="mt-14 lg:mt-24">
@@ -9,15 +11,13 @@ const Whyus = () => {
             style={{ fontFamily: "Playfair Display" }}
             className="text-5xl font-semibold leading-tight"
           >
-            Why Choose Us?
+            {text("why_choose_us_01")}
           </h1>
           <p
             style={{ fontFamily: "Lora" }}
             className="text-lg mt-4 text-gray-700 max-w-4xl mx-auto"
           >
-            We understand that every face is unique. This is why we always
-            provide the best service to ensure a makeup result that is not only
-            beautiful but also suits your character and personality.
+            {text("why_choose_us_02")}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-14 gap-4 mt-8">
@@ -26,14 +26,13 @@ const Whyus = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-3xl font-semibold leading-tight"
             >
-              Professional & Experienced
+              {text("why_choose_us_box_01")}
             </h3>
             <p
               style={{ fontFamily: "Lora" }}
               className="text-lg mt-4 text-gray-700 max-w-4xl mx-auto"
             >
-              Our makeup artist team consists of professionals with years of
-              experience in the beauty industry.
+              {text("why_choose_us_desc_01")}
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -41,14 +40,13 @@ const Whyus = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-3xl font-semibold leading-tight"
             >
-              Premium Quality Products
+              {text("why_choose_us_box_02")}
             </h3>
             <p
               style={{ fontFamily: "Lora" }}
               className="text-lg mt-4 text-gray-700 max-w-4xl mx-auto"
             >
-              We only use the best makeup products that are long-lasting,
-              skin-safe, and suitable for different skin types.
+              {text("why_choose_us_desc_02")}
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -56,14 +54,13 @@ const Whyus = () => {
               style={{ fontFamily: "Playfair Display" }}
               className="text-3xl font-semibold leading-tight"
             >
-              Personalize the Look
+              {text("why_choose_us_box_03")}
             </h3>
             <p
               style={{ fontFamily: "Lora" }}
               className="text-lg mt-4 text-gray-700 max-w-4xl mx-auto"
             >
-              Every client has different needs, and we are ready to create a
-              look that suits your preferences and the event you are attending.
+              {text("why_choose_us_desc_03")}
             </p>
           </div>
         </div>

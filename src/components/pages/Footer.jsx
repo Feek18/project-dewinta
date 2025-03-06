@@ -1,6 +1,8 @@
 import React from "react";
+import useTranslations from "../../services/useTranslations";
 
 const Footer = () => {
+  const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
   return (
     <footer className="bg-[#A68A64] mt-28">
       <div className="max-w-6xl mx-auto px-6 py-10 text-white">
@@ -16,8 +18,7 @@ const Footer = () => {
               </p>
             </div>
             <p style={{ fontFamily: "Lora" }} className="max-w-sm text-md mt-4">
-              True beauty starts with confidence. Let our makeup help you shine
-              in the most natural way.
+              {text("footer_01")}
             </p>
           </div>
           <div style={{ fontFamily: "Playfair Display" }}>

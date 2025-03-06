@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Image from "../fragments/Image";
 import { getImage } from "../../services/image";
+import useTranslations from "../../services/useTranslations";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
 
   useEffect(() => {
     getImage((data) => {
-      console.log("Data dari API:", data); // Debugging
+      // console.log("Data dari API:", data); // Debugging
       setImages(data);
       setLoading(false);
     });
@@ -20,14 +22,13 @@ const Gallery = () => {
           style={{ fontFamily: "Playfair Display" }}
           className="text-5xl font-semibold leading-tight"
         >
-          Gallery
+          {text("gallery_01")}
         </h1>
         <p
           style={{ fontFamily: "Lora" }}
           className="text-lg mt-2 text-gray-700 max-w-4xl mx-auto"
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
-          quibusdam?
+          {text("galery_02")}
         </p>
       </div>
 
