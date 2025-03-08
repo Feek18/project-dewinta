@@ -9,7 +9,7 @@ import Image from "./components/fragments/Image";
 import Gallery from "./components/pages/Gallery";
 import Footer from "./components/pages/Footer";
 import Promo from "./components/pages/Promo";
-import { Calendar, CalendarProvider, Textarea } from "@heroui/react";
+import { Calendar, CalendarProvider, Card, Textarea } from "@heroui/react";
 import {
   Form,
   Input,
@@ -24,6 +24,11 @@ import { getBooking } from "./services/booking";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CardProduct from "./components/fragments/CardProduct";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
@@ -89,7 +94,18 @@ function App() {
       {/* hero */}
       <Hero />
 
-      {/* reservation & product */}
+      {/* product */}
+      <div className="mt-24 px-8 lg:px-16">
+        <h1
+          style={{ fontFamily: "Playfair Display" }}
+          className="text-6xl md:text-5xl font-semibold leading-tight mb-12 text-center"
+        >
+          Our services
+        </h1>
+        <CardProduct />
+      </div>
+
+      {/* reservation */}
       <section className="mt-20 px-8 lg:px-16">
         <div className="flex flex-col lg:flex-row lg:justify-center items-center gap-8">
           <Form
