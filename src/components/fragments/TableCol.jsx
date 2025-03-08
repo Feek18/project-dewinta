@@ -67,7 +67,7 @@ const TableCol = () => {
       case "layanan":
         return (
           <p className="text-sm font-semibold capitalize">
-            {booking.layanan?.name ?? "-"}
+            {booking.id_layanan}
           </p>
         );
 
