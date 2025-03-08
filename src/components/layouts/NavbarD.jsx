@@ -100,21 +100,6 @@ const NavbarD = ({ sidebarOpen, setSidebarOpen, variant = "default" }) => {
 
             {/* Header: Right side */}
             <div className="flex items-center space-x-3">
-              <div>
-                <Input
-                  classNames={{
-                    base: "max-w-full sm:max-w-[10rem] h-10",
-                    mainWrapper: "h-full",
-                    input: "text-small",
-                    inputWrapper:
-                      "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-                  }}
-                  placeholder="Type to search..."
-                  size="sm"
-                  startContent={<SearchIcon size={18} />}
-                  type="search"
-                />
-              </div>
               <hr className="w-px h-6 bg-gray-200 dark:bg-gray-700/60 border-none" />
               {/* <UserMenu align="right" /> */}
               <Dropdown placement="">

@@ -139,20 +139,20 @@ const Header = () => {
 
         <Dropdown>
           <DropdownTrigger className="bg-transparent">
-            <Button
-              startContent={
-                <img
-                  src={`/img/${
-                    currentLanguage === "id" ? "indonesia" : "english"
-                  }.png`}
-                  alt="Language Flag"
-                  className="w-5 h-5"
-                />
-              }
-            >
-              {currentLanguage === "id" ? "Indonesia" : "English"}
+            <Button className="flex items-center">
+              <img
+                src={`/img/${
+                  currentLanguage === "id" ? "indonesia" : "english"
+                }.png`}
+                alt="Language Flag"
+                className="w-5 h-5"
+              />
+              <span className="hidden md:inline ml-2">
+                {currentLanguage === "id" ? "Indonesia" : "English"}
+              </span>
             </Button>
           </DropdownTrigger>
+
           <DropdownMenu aria-label="Dropdown menu with icons" variant="faded">
             <DropdownItem
               startContent={
@@ -164,7 +164,7 @@ const Header = () => {
               }
               onPress={() => handleChangeLanguage("en")}
             >
-              English
+              <span className="">English</span>
             </DropdownItem>
             <DropdownItem
               startContent={
@@ -176,10 +176,11 @@ const Header = () => {
               }
               onPress={() => handleChangeLanguage("id")}
             >
-              Indonesia
+              <span className="">Indonesia</span>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
+
         {/* Jika belum login */}
         {!isLogin ? (
           <NavbarContent className="hidden sm:flex gap-2" justify="end">
