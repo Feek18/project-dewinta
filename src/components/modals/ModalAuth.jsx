@@ -10,7 +10,9 @@ import {
 } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { addToast } from "@heroui/react";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
   const [formData, setFormData] = useState({
@@ -62,10 +64,9 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         localStorage.setItem("email", formData.email);
         localStorage.setItem("name", response.data.user.name);
 
-        addToast({
-          title: "Login Successfully!",
-          description: "You have logged in successfully.",
-          color: "success",
+        toast.success("Login successful!", {
+          position: "top-right",
+          autoClose: 3000,
         });
 
         setTimeout(() => {
@@ -85,10 +86,9 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         localStorage.setItem("telp", response.data.user.telp);
         localStorage.setItem("address", response.data.user.address);
 
-        addToast({
-          title: "Registration Successful!",
-          description: "You have been registered and logged in successfully.",
-          color: "success",
+        toast.success("Registration successful!", {
+          position: "top-right",
+          autoClose: 3000,
         });
 
         // Tutup modal dan redirect ke halaman utama
@@ -103,6 +103,10 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
 
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
+        toast.error("Please try again!!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
         setAlertColor("danger");
         setAlertMessage(

@@ -1,4 +1,7 @@
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // logout
 export const handleLogout = async (
@@ -27,10 +30,9 @@ export const handleLogout = async (
     setEmail(null);
     setName(null);
 
-    addToast({
-      title: "Logout Berhasil",
-      description: "Anda telah berhasil logout.",
-      color: "success",
+    toast.success("Logout successful!", {
+      position: "top-right",
+      autoClose: 3000,
     });
 
     // Navigasi ke home tanpa reload
@@ -40,10 +42,9 @@ export const handleLogout = async (
   } catch (error) {
     console.error("Logout failed:", error);
 
-    addToast({
-      title: "Logout Gagal!",
-      description: "Terjadi kesalahan saat logout.",
-      color: "danger",
+    toast.error("Logout Failed!", {
+      position: "top-right",
+      autoClose: 3000,
     });
   }
 };
