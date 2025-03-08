@@ -87,11 +87,11 @@ const Header = () => {
   }, []);
 
   const handleChangeLanguage = (lang) => {
-    console.log(`Mengubah bahasa ke: ${lang}`);
+    // console.log(`Mengubah bahasa ke: ${lang}`);
     changeLanguage(lang);
   };
 
-  console.log("Header dirender ulang! Bahasa saat ini:", currentLanguage);
+  // console.log("Header dirender ulang! Bahasa saat ini:", currentLanguage);
 
   return (
     <>
@@ -138,7 +138,7 @@ const Header = () => {
         </NavbarContent>
 
         <Dropdown>
-          <DropdownTrigger className="bg-white">
+          <DropdownTrigger className="bg-transparent">
             <Button
               startContent={
                 <img

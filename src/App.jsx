@@ -20,14 +20,69 @@ import {
 } from "@heroui/react";
 import axios from "axios";
 import useTranslations from "./services/useTranslations";
+import { getBooking } from "./services/booking";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
   const [errors, setErrors] = React.useState({});
   const { text, currentLanguage } = useTranslations(); // Ambil `text` dan `currentLanguage`
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    telp: "",
+    alamat: "",
+    date: "",
+    id_layanan: 6,
+  });
+  const [booking, setBooking] = useState([]);
+
+  useEffect(() => {
+    getBooking(setBooking);
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === "date" ? value.split("T")[0] : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted", formData);
+
+    const token = localStorage.getItem("token");
+    axios
+      .post("http://localhost:8000/api/booking-salon", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log("API Response:", res.data);
+        toast.success("Booking successful!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      })
+      .catch((err) => {
+        console.error("API Error:", err);
+        toast.error("Failed to fetch booking data!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        if (err.response && err.response.data.errors) {
+          setErrors(err.response.data.errors);
+        }
+      });
+  };
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} />
       {/* navbar */}
       <Header />
 
@@ -41,7 +96,7 @@ function App() {
             className="flex flex-col"
             validationErrors={errors}
             onReset={() => setSubmitted(null)}
-            // onSubmit={onSubmit}
+            onSubmit={handleSubmit}
           >
             {/* Container utama */}
             <div className="bg-white w-full lg:w-[700px] p-8">
@@ -58,11 +113,9 @@ function App() {
                 <div className="flex flex-col gap-4">
                   <Input
                     isRequired
-                    errorMessage={({ validationDetails }) => {
-                      if (validationDetails.valueMissing)
-                        return "Please enter your name";
-                      return errors.name;
-                    }}
+                    value={formData.name}
+                    onChange={handleChange}
+                    errorMessage={errors.name}
                     label={text("name")}
                     labelPlacement="outside"
                     name="name"
@@ -71,12 +124,9 @@ function App() {
 
                   <Input
                     isRequired
-                    errorMessage={({ validationDetails }) => {
-                      if (validationDetails.valueMissing)
-                        return "Please enter your telp";
-                      if (validationDetails.typeMismatch)
-                        return "Please enter a valid phone number";
-                    }}
+                    value={formData.telp}
+                    onChange={handleChange}
+                    errorMessage={errors.telp}
                     label={text("telp")}
                     labelPlacement="outside"
                     name="telp"
@@ -85,16 +135,13 @@ function App() {
                   />
                   <Input
                     isRequired
-                    // errorMessage={({ validationDetails }) => {
-                    //   if (validationDetails.valueMissing)
-                    //     return "Please enter your telp";
-                    //   if (validationDetails.typeMismatch)
-                    //     return "Please enter a valid phone number";
-                    // }}
+                    value={formData.date}
+                    onChange={handleChange}
+                    errorMessage={errors.date}
                     label={text("date_booking")}
                     labelPlacement="outside"
                     name="date"
-                    placeholder="Enter your phone number"
+                    // placeholder="Enter your phone number"
                     type="date"
                   />
                 </div>
@@ -103,12 +150,9 @@ function App() {
                 <div className="flex flex-col gap-4">
                   <Input
                     isRequired
-                    errorMessage={({ validationDetails }) => {
-                      if (validationDetails.valueMissing)
-                        return "Please enter your email";
-                      if (validationDetails.typeMismatch)
-                        return "Please enter a valid email address";
-                    }}
+                    value={formData.email}
+                    onChange={handleChange}
+                    errorMessage={errors.email}
                     label={text("email")}
                     labelPlacement="outside"
                     name="email"
@@ -117,12 +161,9 @@ function App() {
                   />
                   <Textarea
                     isRequired
-                    errorMessage={({ validationDetails }) => {
-                      if (validationDetails.valueMissing)
-                        return "Please enter your address";
-                      if (validationDetails.tooShort)
-                        return "Address is too short";
-                    }}
+                    value={formData.alamat}
+                    onChange={handleChange}
+                    errorMessage={errors.alamat}
                     label="Address"
                     labelPlacement="outside"
                     name="alamat"
