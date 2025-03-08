@@ -23,7 +23,6 @@ const useTranslations = () => {
     axios
       .get("http://localhost:8000/api/translations")
       .then((res) => {
-        console.log("📥 API Response:", res.data);
         const data = res.data.data;
 
         let translationMap = { en: {}, id: {} };
@@ -33,18 +32,16 @@ const useTranslations = () => {
           translationMap.id[item.lang_code] = item.lang_id;
         });
 
-        console.log("✅ Translations Updated:", translationMap);
         setTranslations(translationMap);
 
         // Simpan ke localStorage agar tidak perlu request lagi
         localStorage.setItem("translations", JSON.stringify(translationMap));
       })
-      .catch((err) => console.error("❌ Error fetching translations:", err));
+      .catch((err) => console.error("Error fetching translations:", err));
   }, [currentLanguage]); // 🔥 Hanya dijalankan sekali saat pertama kali komponen dimuat
 
   // 🔄 Ubah bahasa & simpan ke localStorage
   const changeLanguage = (lang) => {
-    console.log(`🌍 Bahasa diubah ke: ${lang}`);
     localStorage.setItem("language", lang);
     setCurrentLanguage(lang);
     window.location.reload();

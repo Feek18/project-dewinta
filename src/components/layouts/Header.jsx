@@ -87,11 +87,8 @@ const Header = () => {
   }, []);
 
   const handleChangeLanguage = (lang) => {
-    // console.log(`Mengubah bahasa ke: ${lang}`);
     changeLanguage(lang);
   };
-
-  // console.log("Header dirender ulang! Bahasa saat ini:", currentLanguage);
 
   return (
     <>

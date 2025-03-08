@@ -13,7 +13,7 @@ const Hero = () => {
       setImages(data);
       setLoading(false);
     });
-  }, [currentLanguage]);
+  }, []);
 
   return (
     <section id="home" className="mt-14 lg:mt-24">
