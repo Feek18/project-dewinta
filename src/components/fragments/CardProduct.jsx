@@ -20,7 +20,6 @@ const CardProduct = () => {
     getLayananSalon(setDatas);
   }, []);
 
-  console.log("State Datas:", datas);
   return (
     <>
       <div className="relative px-4 sm:px-8 lg:px-16">
@@ -32,7 +31,7 @@ const CardProduct = () => {
             prevEl: ".swiper-button-prev",
           }}
           breakpoints={{
-            640: { slidesPerView: 2, spaceBetween: 20 },
+            640: { slidesPerView: 2, spaceBetween: 14 },
             1024: { slidesPerView: 4, spaceBetween: 30 },
           }}
           modules={[Navigation]}
@@ -40,7 +39,7 @@ const CardProduct = () => {
         >
           {datas.length > 0 &&
             datas.map((item, index) => (
-              <SwiperSlide key={index} className="flex justify-center">
+              <SwiperSlide key={index} className="flex justify-center items-center">
                 <Card className="p-2 shadow-md flex flex-col w-[300px]">
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-xs font-semibold uppercase min-h-[40px] line-clamp-2">

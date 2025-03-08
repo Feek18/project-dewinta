@@ -43,6 +43,7 @@ const TableCol = () => {
           }
         );
         setBookings(response.data.data);
+        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -66,9 +67,10 @@ const TableCol = () => {
       case "layanan":
         return (
           <p className="text-sm font-semibold capitalize">
-            {booking.layanan_salon?.name || "-"}
+            {booking.layanan?.name ?? "-"}
           </p>
         );
+
       case "status":
         return (
           <Chip
@@ -99,7 +101,7 @@ const TableCol = () => {
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn
-            className="text-center"
+              className="text-center"
               key={column.uid}
               align={column.uid === "actions" ? "center" : "start"}
             >

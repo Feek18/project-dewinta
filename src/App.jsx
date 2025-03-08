@@ -29,6 +29,23 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import { getLayananSalon } from "./services/service";
+
+export const animals = [
+  { key: "cat", label: "Cat" },
+  { key: "dog", label: "Dog" },
+  { key: "elephant", label: "Elephant" },
+  { key: "lion", label: "Lion" },
+  { key: "tiger", label: "Tiger" },
+  { key: "giraffe", label: "Giraffe" },
+  { key: "dolphin", label: "Dolphin" },
+  { key: "penguin", label: "Penguin" },
+  { key: "zebra", label: "Zebra" },
+  { key: "shark", label: "Shark" },
+  { key: "whale", label: "Whale" },
+  { key: "otter", label: "Otter" },
+  { key: "crocodile", label: "Crocodile" },
+];
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
@@ -40,9 +57,11 @@ function App() {
     telp: "",
     alamat: "",
     date: "",
-    id_layanan: 6,
+    layanan: "",
+    id_layanan: "",
   });
   const [booking, setBooking] = useState([]);
+  const [layanan, setLayanan] = useState([]);
 
   useEffect(() => {
     getBooking(setBooking);
@@ -58,13 +77,17 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted", formData);
+    // console.log("Form submitted", formData);
 
     const token = localStorage.getItem("token");
     axios
-      .post("http://localhost:8000/api/booking-salon", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        "http://localhost:8000/api/booking-salon",
+        { ...formData, id_layanan: String(formData.id_layanan) },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
         console.log("API Response:", res.data);
         toast.success("Booking successful!", {
@@ -84,6 +107,10 @@ function App() {
         }
       });
   };
+
+  useEffect(() => {
+    getLayananSalon(setLayanan);
+  }, []);
 
   return (
     <>
@@ -175,6 +202,26 @@ function App() {
                     placeholder="Enter your email"
                     type="email"
                   />
+                  <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                    <Select
+                      name="id_layanan"
+                      className="max-w-xs"
+                      label="Nama Layanan"
+                      placeholder="Pilih layanan"
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          id_layanan: String(e.target.value),
+                        })
+                      }
+                    >
+                      {layanan.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                  </div>
                   <Textarea
                     isRequired
                     value={formData.alamat}
