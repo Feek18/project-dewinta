@@ -218,7 +218,7 @@ function App() {
                     // placeholder="Enter your phone number"
                     type="date"
                   />
-                  <p >
+                  <p className="text-[12px] text-gray-500">
                     {tersepi ? `Hari tersepi bulan ini: ${tersepi}` : "Tidak ada data hari tersepi untuk bulan ini."}
                   </p>
                 </div>
