@@ -26,7 +26,7 @@ import { getLayananSalon } from "../../services/service";
 import Sidebar from "../layouts/Sidebar";
 import NavbarD from "../layouts/NavbarD";
 import { Alert } from "@heroui/react";
-
+import { ToastContainer } from "react-toastify";
 const DashboardTable = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
@@ -80,6 +80,7 @@ const DashboardTable = () => {
                   >
                     List Booking
                   </h1>
+                  <ToastContainer position="top-right" autoClose={3000} />
                   <TableCol />
                 </div>
               </div>

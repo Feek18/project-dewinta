@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from "@heroui/react";
 import axios from "axios";
+import {handlePayment} from "../../services/payment";
 
 const columns = [
   { name: "NAMA", uid: "name" },
@@ -34,6 +35,14 @@ const TableCol = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+        const refreshPayment = await axios.get(
+          "http://localhost:8000/api/refresh/payment",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         const response = await axios.get(
           "http://localhost:8000/api/booking-salon",
           {
@@ -82,14 +91,18 @@ const TableCol = () => {
             {booking.status}
           </Chip>
         );
-      case "payments":
-        return (
-          <div className="flex justify-center items-center gap-2">
-            <button className="text-md text-white bg-blue-500 px-4 py-1 rounded-full">
-              Take a Payment
-            </button>
-          </div>
-        );
+        case "payments":
+          return (
+            <div className="flex justify-center items-center gap-2">
+              <button
+                className="text-md text-white bg-blue-500 px-4 py-1 rounded-full"
+                onClick={() => handlePayment(booking.order_id)}
+              >
+                Take a Payment
+              </button>
+            </div>
+          );
+        
       default:
         return booking[columnKey];
     }

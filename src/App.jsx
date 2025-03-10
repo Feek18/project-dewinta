@@ -73,14 +73,6 @@ function App() {
         }
       )
       .then((res) => {
-        axios
-          .post(
-            "http://localhost:8000/api/booking-salon",
-            { ...formData, id_layanan: String(formData.id_layanan) },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-        )
         if (res.data.snapToken) {
           // Initiate Midtrans payment
           window.snap.pay(res.data.snapToken, {
@@ -90,7 +82,7 @@ function App() {
                 position: "top-right",
                 autoClose: 3000,
               });
-            },
+            }, 
             onPending: function (result) {
               console.log("Payment pending:", result);
               toast.warning("Payment is pending!", {
@@ -98,6 +90,7 @@ function App() {
                 autoClose: 3000,
               });
             },
+
             onError: function (result) {
               console.log("Payment error:", result);
               toast.error("Payment failed!", {
@@ -229,7 +222,7 @@ function App() {
                 <div className="flex flex-col gap-4">
                   <Input
                     isRequired
-                    value={formData.email}
+                    value={localStorage.getItem("email")}
                     onChange={handleChange}
                     errorMessage={errors.email}
                     label={text("email")}
@@ -237,6 +230,7 @@ function App() {
                     name="email"
                     placeholder="Enter your email"
                     type="email"
+                    readOnly
                   />
                   <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Select
