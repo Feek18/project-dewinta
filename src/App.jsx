@@ -9,7 +9,7 @@ import Image from "./components/fragments/Image";
 import Gallery from "./components/pages/Gallery";
 import Footer from "./components/pages/Footer";
 import Promo from "./components/pages/Promo";
-import { useScheduleData } from './services/schedule';
+import { useScheduleData } from "./services/schedule";
 import { Calendar, CalendarProvider, Card, Textarea } from "@heroui/react";
 import {
   Form,
@@ -31,6 +31,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { getLayananSalon } from "./services/service";
+import WebsiteInfo from "./components/fragments/WebsiteInfo";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
@@ -60,12 +61,12 @@ function App() {
       [name]: name === "date" ? value.split("T")[0] : value,
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const token = localStorage.getItem("token");
-  
+
     axios
       .post(
         "/api/midtrans", // Ensure this endpoint generates a Snap Token
@@ -84,7 +85,7 @@ function App() {
                 position: "top-right",
                 autoClose: 3000,
               });
-            }, 
+            },
             onPending: function (result) {
               console.log("Payment pending:", result);
               toast.warning("Payment is pending!", {
@@ -114,7 +115,7 @@ function App() {
             autoClose: 3000,
           });
         }
-  
+
         // Reset form data after successful booking
         setFormData({
           name: "",
@@ -131,13 +132,12 @@ function App() {
           position: "top-right",
           autoClose: 3000,
         });
-  
+
         if (err.response && err.response.data.errors) {
           setErrors(err.response.data.errors);
         }
       });
   };
-  
 
   useEffect(() => {
     getLayananSalon(setLayanan);
@@ -145,6 +145,7 @@ function App() {
 
   return (
     <>
+      <WebsiteInfo />
       <ToastContainer position="top-right" autoClose={3000} />
       {/* navbar */}
       <Header />
@@ -219,7 +220,9 @@ function App() {
                     type="date"
                   />
                   <p className="text-[12px] text-gray-500">
-                    {tersepi ? `Hari tersepi bulan ini: ${tersepi}` : "Tidak ada data hari tersepi untuk bulan ini."}
+                    {tersepi
+                      ? `Hari tersepi bulan ini: ${tersepi}`
+                      : "Tidak ada data hari tersepi untuk bulan ini."}
                   </p>
                 </div>
 

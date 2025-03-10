@@ -35,6 +35,22 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 760);
   const { currentLanguage, changeLanguage } = useTranslations();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/translations")
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.websiteInfo);
+        console.log(result.websiteInfo.header_logo);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  // Jika data masih null, tampilkan loading atau handle dengan nilai default
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   // Handle perubahan ukuran layar
   useEffect(() => {
@@ -101,14 +117,19 @@ const Header = () => {
             <div className="flex items-center gap-2">
               <img
                 className="h-10 lg:h-12 auto"
-                src="./public/img/logo.png"
+                src={
+                  data?.header_logo
+                    ? `http://localhost:8000/storage/logos/logo.png`
+                    : "/img/logo.png"
+                }
                 alt="Logo"
               />
+
               <p
                 style={{ fontFamily: "Parisienne" }}
                 className="font-bold text-2xl lg:text-4xl"
               >
-                Dewinta Makeup
+                {data?.header_title}
               </p>
             </div>
             <div className="lg:flex items-center gap-6 hidden">
