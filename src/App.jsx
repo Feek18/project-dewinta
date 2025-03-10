@@ -9,6 +9,7 @@ import Image from "./components/fragments/Image";
 import Gallery from "./components/pages/Gallery";
 import Footer from "./components/pages/Footer";
 import Promo from "./components/pages/Promo";
+import { useScheduleData } from './services/schedule';
 import { Calendar, CalendarProvider, Card, Textarea } from "@heroui/react";
 import {
   Form,
@@ -33,6 +34,7 @@ import { getLayananSalon } from "./services/service";
 
 function App() {
   const [submitted, setSubmitted] = React.useState(null);
+  const { scheduleData, tersepi, loading, error } = useScheduleData();
   const [errors, setErrors] = React.useState({});
   const { text, currentLanguage } = useTranslations(); // Ambil `text` dan `currentLanguage`
   const [formData, setFormData] = useState({
@@ -216,6 +218,9 @@ function App() {
                     // placeholder="Enter your phone number"
                     type="date"
                   />
+                  <p >
+                    {tersepi ? `Hari tersepi bulan ini: ${tersepi}` : "Tidak ada data hari tersepi untuk bulan ini."}
+                  </p>
                 </div>
 
                 {/* Kolom Kanan */}
