@@ -14,6 +14,8 @@ const useTranslations = () => {
     localStorage.getItem("language") || "en"
   );
 
+  const [isLoading, setIsLoading] = useState(!translations);
+
   useEffect(() => {
     // Cek apakah data sudah ada di localStorage, jika ada skip API call
     if (localStorage.getItem("translations")) {
