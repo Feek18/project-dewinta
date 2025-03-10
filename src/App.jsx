@@ -61,9 +61,26 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("Form submitted", formData);
 
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.warning("Please login first!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      setFormData({
+        name: "",
+        email: "",
+        telp: "",
+        alamat: "",
+        date: "",
+        id_layanan: "",
+      });
+
+      return;
+    }
     axios
       .post(
         "http://localhost:8000/api/booking-salon",
@@ -78,7 +95,7 @@ function App() {
           position: "top-right",
           autoClose: 3000,
         });
-        
+
         setFormData({
           name: "",
           telp: "",
@@ -87,10 +104,6 @@ function App() {
           id_layanan: "",
           alamat: "",
         });
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
       })
       .catch((err) => {
         // console.error("API Error:", err);

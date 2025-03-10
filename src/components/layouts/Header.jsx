@@ -22,7 +22,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import ModalEdit from "../modals/ModalEdit";
 import { handleLogout } from "../../services/auth";
-import { cn } from "@heroui/react";
 import useTranslations from "../../services/useTranslations";
 
 const Header = () => {
