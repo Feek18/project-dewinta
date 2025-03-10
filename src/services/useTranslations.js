@@ -3,20 +3,19 @@ import axios from "axios";
 
 const useTranslations = () => {
   const [translations, setTranslations] = useState(() => {
-    // Ambil data dari localStorage saat pertama kali hook dipanggil
     const savedTranslations = localStorage.getItem("translations");
-    return savedTranslations
-      ? JSON.parse(savedTranslations)
-      : { en: {}, id: {} };
+    return savedTranslations ? JSON.parse(savedTranslations) : null;
   });
 
   const [currentLanguage, setCurrentLanguage] = useState(
     localStorage.getItem("language") || "en"
   );
 
+  const [isLoading, setIsLoading] = useState(!translations);
+
   useEffect(() => {
-    // Cek apakah data sudah ada di localStorage, jika ada skip API call
-    if (localStorage.getItem("translations")) {
+    if (translations) {
+      setIsLoading(false);
       return;
     }
 
@@ -24,6 +23,10 @@ const useTranslations = () => {
       .get("http://localhost:8000/api/translations")
       .then((res) => {
         const data = res.data.data;
+
+        if (!data || data.length === 0) {
+          throw new Error("Empty translations data");
+        }
 
         let translationMap = { en: {}, id: {} };
 
@@ -33,23 +36,27 @@ const useTranslations = () => {
         });
 
         setTranslations(translationMap);
-
-        // Simpan ke localStorage agar tidak perlu request lagi
         localStorage.setItem("translations", JSON.stringify(translationMap));
+        setIsLoading(false);
       })
-      .catch((err) => console.error("Error fetching translations:", err));
-  }, [currentLanguage]); // 🔥 Hanya dijalankan sekali saat pertama kali komponen dimuat
+      .catch((err) => {
+        console.error("Error fetching translations:", err);
+        setIsLoading(false);
+      });
+  }, []); // 🔥 Tidak menggunakan `currentLanguage` agar tidak loop terus
 
-  // 🔄 Ubah bahasa & simpan ke localStorage
   const changeLanguage = (lang) => {
     localStorage.setItem("language", lang);
     setCurrentLanguage(lang);
-    window.location.reload();
+    setTranslations(JSON.parse(localStorage.getItem("translations"))); // ✅ Update tanpa reload
   };
 
-  const text = (id) => translations?.[currentLanguage]?.[id] || `[${id}]`;
+  const text = (id) => {
+    if (isLoading) return "Loading...";
+    return translations?.[currentLanguage]?.[id] || `[${id}]`;
+  };
 
-  return { text, currentLanguage, changeLanguage };
+  return { text, currentLanguage, changeLanguage, isLoading };
 };
 
 export default useTranslations;
