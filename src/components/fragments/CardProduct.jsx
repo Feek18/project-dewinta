@@ -39,7 +39,10 @@ const CardProduct = () => {
         >
           {datas.length > 0 &&
             datas.map((item, index) => (
-              <SwiperSlide key={index} className="flex justify-center items-center">
+              <SwiperSlide
+                key={index}
+                className="flex justify-center items-center"
+              >
                 <Card className="p-2 shadow-md flex flex-col w-[300px]">
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-xs font-semibold uppercase min-h-[40px] line-clamp-2">
@@ -49,14 +52,6 @@ const CardProduct = () => {
                     <h3 className="font-bold text-large">{item.name}</h3>
                   </CardHeader>
                   <CardBody className="overflow-visible py-2">
-                    <Image
-                      alt="Card background"
-                      className="object-cover w-full h-40 rounded-xl"
-                      src="https://heroui.com/images/hero-card-complete.jpeg"
-                      width={270}
-                    />
-                  </CardBody>
-                  <CardFooter className="justify-between overflow-hidden py-1 absolute bottom-[135px] right-2 before:rounded-xl rounded-large w-[calc(100%_-_8px)] z-10">
                     <Button
                       className="text-tiny text-white bg-black/20"
                       color="default"
@@ -64,9 +59,9 @@ const CardProduct = () => {
                       size="sm"
                       variant="flat"
                     >
-                      $ {item.harga}
+                      Rp {item.harga.toLocaleString()}
                     </Button>
-                  </CardFooter>
+                  </CardBody>
                 </Card>
               </SwiperSlide>
             ))}

@@ -201,7 +201,7 @@ function App() {
                     >
                       {layanan.map((item) => (
                         <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                          {`${item.name} - Rp${item.harga.toLocaleString()}`}
                         </SelectItem>
                       ))}
                     </Select>

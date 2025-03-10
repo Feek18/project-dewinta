@@ -114,6 +114,12 @@ const ModalAuth = ({ isOpen, onClose, mode, setMode }) => {
         );
         setShowAlert(true);
       }
+      // reset inputan
+      setFormData((prevData) => ({
+        ...prevData,
+        email: "",
+        password: "",
+      }));
     } finally {
       setLoading(false);
     }

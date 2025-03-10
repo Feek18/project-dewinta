@@ -4,33 +4,30 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const getBooking = (callback) => {
   const token = localStorage.getItem("token");
+
+  // Jika tidak ada token, cukup hentikan fungsi tanpa error
+  if (!token) {
+    return; // Tidak menampilkan error, hanya menghentikan eksekusi
+  }
+
   axios
     .get("http://localhost:8000/api/booking-salon", {
       headers: {
-        Authorization: `Bearer ${token}`, // Kirim token dalam header
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((res) => {
-      callback(res.data.data);
-      //   console.log(res.data.data);
+      if (callback) callback(res.data.data); // Pastikan callback hanya dipanggil jika tersedia
     })
     .catch((err) => {
-      console.log(err);
+      console.error("Error fetching bookings:", err);
+
       if (err.response) {
-        console.log("Error Response:", err.response.data);
-        toast.dismiss();
+        console.error("Error Response:", err.response.data);
         toast.error("Failed to fetch booking data!", {
           position: "top-right",
           autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
         });
-        if (err.response.data.errors) {
-          setErrors(err.response.data.errors);
-        }
       }
     });
 };
