@@ -25,14 +25,16 @@ const CardProduct = () => {
       <div className="relative px-4 sm:px-8 lg:px-16">
         <Swiper
           slidesPerView={1} // Tampilkan 1 item di layar kecil
-          spaceBetween={10}
+          spaceBetween={20}
           navigation={{
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
           }}
           breakpoints={{
-            640: { slidesPerView: 2, spaceBetween: 14 },
-            1024: { slidesPerView: 4, spaceBetween: 30 },
+            480: { slidesPerView: 1, spaceBetween: 15 },
+            768: { slidesPerView: 2, spaceBetween: 20 },
+            1024: { slidesPerView: 3, spaceBetween: 30 },
+            1280: { slidesPerView: 4, spaceBetween: 35 },
           }}
           modules={[Navigation]}
           className="w-full"
@@ -43,7 +45,7 @@ const CardProduct = () => {
                 key={index}
                 className="flex justify-center items-center"
               >
-                <Card className="p-2 shadow-md flex flex-col w-[300px]">
+                <Card className="p-2 shadow-md flex flex-col lg:w-[300px] xl:w-[260px]">
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-xs font-semibold uppercase min-h-[40px] line-clamp-2">
                       {item.description}
