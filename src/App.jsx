@@ -58,27 +58,69 @@ function App() {
       [name]: name === "date" ? value.split("T")[0] : value,
     });
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("Form submitted", formData);
-
+    
     const token = localStorage.getItem("token");
+  
     axios
       .post(
-        "http://localhost:8000/api/booking-salon",
+        "/api/midtrans", // Ensure this endpoint generates a Snap Token
         { ...formData, id_layanan: String(formData.id_layanan) },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then((res) => {
-        // console.log("API Response:", res.data);
-        toast.success("Booking successful!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        
+        axios
+          .post(
+            "http://localhost:8000/api/booking-salon",
+            { ...formData, id_layanan: String(formData.id_layanan) },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+        )
+        if (res.data.snapToken) {
+          // Initiate Midtrans payment
+          window.snap.pay(res.data.snapToken, {
+            onSuccess: function (result) {
+              console.log("Payment successful:", result);
+              toast.success("Payment successful!", {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            },
+            onPending: function (result) {
+              console.log("Payment pending:", result);
+              toast.warning("Payment is pending!", {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            },
+            onError: function (result) {
+              console.log("Payment error:", result);
+              toast.error("Payment failed!", {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            },
+            onClose: function () {
+              console.log("Payment popup closed");
+              toast.info("Payment process canceled.", {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            },
+          });
+        } else {
+          toast.error("Failed to retrieve payment token!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        }
+  
+        // Reset form data after successful booking
         setFormData({
           name: "",
           telp: "",
@@ -87,23 +129,20 @@ function App() {
           id_layanan: "",
           alamat: "",
         });
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
       })
       .catch((err) => {
-        // console.error("API Error:", err);
+        console.error("API Error:", err);
         toast.error("Failed to fetch booking data!", {
           position: "top-right",
           autoClose: 3000,
         });
-
+  
         if (err.response && err.response.data.errors) {
           setErrors(err.response.data.errors);
         }
       });
   };
+  
 
   useEffect(() => {
     getLayananSalon(setLayanan);
@@ -202,6 +241,7 @@ function App() {
                   <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
                     <Select
                       name="id_layanan"
+                      id="id_layanan"
                       className="max-w-xs"
                       label="Nama Layanan"
                       placeholder="Pilih layanan"
