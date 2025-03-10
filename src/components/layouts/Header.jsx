@@ -119,7 +119,7 @@ const Header = () => {
                 className="h-10 lg:h-12 auto"
                 src={
                   data?.header_logo
-                    ? `http://localhost:8000/storage/logos/logo.png`
+                    ? `http://localhost:8000/storage/${data.header_logo}`
                     : "/img/logo.png"
                 }
                 alt="Logo"

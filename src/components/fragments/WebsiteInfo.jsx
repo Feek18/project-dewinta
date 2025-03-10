@@ -33,7 +33,7 @@ function App() {
         rel="icon"
         href={
           data?.favicon
-            ? `http://localhost:8000/storage/favicons/logo.png`
+            ? `http://localhost:8000/storage/${data.favicon}`
             : ""
         }
         type="image/png"
