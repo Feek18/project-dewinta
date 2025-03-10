@@ -92,7 +92,7 @@ const Header = () => {
 
   return (
     <>
-      <Navbar onMenuOpenChange={setIsMenuOpen} shouldHideOnScroll>
+      <Navbar onMenuOpenChange={setIsMenuOpen}>
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
