@@ -78,6 +78,19 @@ function App() {
           position: "top-right",
           autoClose: 3000,
         });
+        
+        setFormData({
+          name: "",
+          telp: "",
+          date: "",
+          email: "",
+          id_layanan: "",
+          alamat: "",
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((err) => {
         // console.error("API Error:", err);
