@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import useTranslations from "../../services/useTranslations";
 
 const Footer = () => {
   const { text } = useTranslations(); // Ambil `text` dan `currentLanguage`
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/translations")
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.websiteInfo);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
   return (
     <footer className="bg-[#A68A64] mt-28">
       <div className="max-w-6xl mx-auto px-6 py-10 text-white">
         <div className="flex flex-col md:flex-row lg:justify-between lg:items-center gap-6">
           <div>
             <div className="flex items-center space-x-2">
-              <img className="h-16 auto" src="./public/img/logo.png" alt="" />
+              <img
+                className="h-16 auto"
+                src={
+                  data?.header_logo
+                    ? `http://localhost:8000/storage/${data.header_logo}`
+                    : "/img/logo.png"
+                }
+                alt=""
+              />
               <p
                 style={{ fontFamily: "Parisienne" }}
-                className="font-bold text-2xl"
+                className="font-bold text-3xl"
               >
-                Dewinta Makeup
+                {data?.header_title}
               </p>
             </div>
             <p style={{ fontFamily: "Lora" }} className="max-w-sm text-md mt-4">
@@ -71,7 +90,7 @@ const Footer = () => {
           className="flex flex-col md:flex-row justify-between items-center text-sm text-white"
         >
           <p>
-            © 2025 Dewint Makeup. All Rights Reserved. Your beauty, our
+            © 2025 {data?.web_title}. All Rights Reserved. Your beauty, our
             inspiration.
           </p>
           <div className="flex space-x-4">

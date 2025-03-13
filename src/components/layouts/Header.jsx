@@ -42,7 +42,7 @@ const Header = () => {
       .then((response) => response.json())
       .then((result) => {
         setData(result.websiteInfo);
-        console.log(result.websiteInfo.header_logo);
+        // console.log(result.websiteInfo.header_logo);
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
