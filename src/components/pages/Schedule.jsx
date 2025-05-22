@@ -56,10 +56,11 @@ const Schedule = () => {
 
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-  const generateChartData = (tersibuk, tersepi) => {
+  const generateChartData = (data) => {
     return days.map((day) => ({
       name: day,
-      value: day === tersibuk ? 3 : day === tersepi ? 1 : 2,
+      value: data[`booking_${day.toLowerCase()}`] ?? 0,
+      fill: getBarColor(day, data.tersibuk, data.tersepi),
     }));
   };
 
@@ -117,34 +118,22 @@ const Schedule = () => {
             {months.find((m) => m.value === filteredData.month)?.label}{" "}
             {filteredData.year}
           </h3>
-          <BarChart
-            width={400}
-            height={250}
-            data={generateChartData(
-              filteredData.tersibuk,
-              filteredData.tersepi
-            )}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis hide />
-            <Tooltip />
-            <Bar dataKey="value">
-              {generateChartData(
-                filteredData.tersibuk,
-                filteredData.tersepi
-              ).map((entry, idx) => (
-                <Cell
-                  key={`cell-${idx}`}
-                  fill={getBarColor(
-                    entry.name,
-                    filteredData.tersibuk,
-                    filteredData.tersepi
-                  )}
-                />
-              ))}
-            </Bar>
-          </BarChart>
+          {(() => {
+            const chartData = generateChartData(filteredData);
+            return (
+              <BarChart width={400} height={250} data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                {/* <YAxis /> */}
+                <Tooltip />
+                <Bar dataKey="value">
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            );
+          })()}
           <div className="mt-3 flex justify-center items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-[#DC2626] rounded-full" />
