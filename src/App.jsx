@@ -7,6 +7,7 @@ import About from "./components/pages/About";
 import Whyus from "./components/pages/Whyus";
 import Image from "./components/fragments/Image";
 import Gallery from "./components/pages/Gallery";
+import Schedule from "./components/pages/Schedule";
 import Footer from "./components/pages/Footer";
 import Promo from "./components/pages/Promo";
 import { useScheduleData } from "./services/schedule";
@@ -166,127 +167,130 @@ function App() {
 
       {/* reservation */}
       <section className="mt-20 px-8 lg:px-16">
-        <div className="flex flex-col lg:flex-row lg:justify-center items-center gap-8">
-          <Form
-            className="flex flex-col"
-            validationErrors={errors}
-            onReset={() => setSubmitted(null)}
-            onSubmit={handleSubmit}
-          >
-            {/* Container utama */}
-            <div className="bg-white w-full lg:w-[700px] p-8">
-              <h1
-                style={{ fontFamily: "Playfair Display" }}
-                className="text-4xl font-semibold leading-tight mb-8"
-              >
-                {text("reservation_01")}
-              </h1>
+        <div className="container mx-auto flex justify-between items-center lg:px-16 gap-6">
+          <Schedule/>
+          <div className="flex flex-col lg:flex-row lg:justify-center items-center gap-8">
+            <Form
+              className="flex flex-col"
+              validationErrors={errors}
+              onReset={() => setSubmitted(null)}
+              onSubmit={handleSubmit}
+            >
+              {/* Container utama */}
+              <div className="bg-white w-full lg:w-[700px] p-8">
+                <h1
+                  style={{ fontFamily: "Playfair Display" }}
+                  className="text-4xl font-semibold leading-tight mb-8"
+                >
+                  {text("reservation_01")}
+                </h1>
 
-              {/* Grid untuk form */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Kolom Kiri */}
-                <div className="flex flex-col gap-4">
-                  <Input
-                    isRequired
-                    value={formData.name}
-                    onChange={handleChange}
-                    errorMessage={errors.name}
-                    label={text("name")}
-                    labelPlacement="outside"
-                    name="name"
-                    placeholder={text("enter_your_name")}
-                  />
+                {/* Grid untuk form */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Kolom Kiri */}
+                  <div className="flex flex-col gap-4">
+                    <Input
+                      isRequired
+                      value={formData.name}
+                      onChange={handleChange}
+                      errorMessage={errors.name}
+                      label={text("name")}
+                      labelPlacement="outside"
+                      name="name"
+                      placeholder={text("enter_your_name")}
+                    />
 
-                  <Input
-                    isRequired
-                    value={formData.telp}
-                    onChange={handleChange}
-                    errorMessage={errors.telp}
-                    label={text("telp")}
-                    labelPlacement="outside"
-                    name="telp"
-                    placeholder="Enter your phone number"
-                    type="number"
-                  />
-                  <Input
-                    isRequired
-                    value={formData.date}
-                    onChange={handleChange}
-                    errorMessage={errors.date}
-                    label={text("date_booking")}
-                    labelPlacement="outside"
-                    name="date"
-                    // placeholder="Enter your phone number"
-                    type="date"
-                  />
-                  <p className="text-[12px] text-gray-500">
-                    {tersepi
-                      ? `Hari tersepi bulan ini: ${tersepi}`
-                      : "Tidak ada data hari tersepi untuk bulan ini."}
-                  </p>
-                </div>
-
-                {/* Kolom Kanan */}
-                <div className="flex flex-col gap-4">
-                  <Input
-                    isRequired
-                    value={localStorage.getItem("email")}
-                    onChange={handleChange}
-                    errorMessage={errors.email}
-                    label={text("email")}
-                    labelPlacement="outside"
-                    name="email"
-                    placeholder="Enter your email"
-                    type="email"
-                    readOnly
-                  />
-                  <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                    <Select
-                      name="id_layanan"
-                      id="id_layanan"
-                      className="max-w-xs"
-                      label="Nama Layanan"
-                      placeholder="Pilih layanan"
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          id_layanan: String(e.target.value),
-                        })
-                      }
-                    >
-                      {layanan.map((item) => (
-                        <SelectItem key={item.id} value={item.id}>
-                          {`${item.name} - Rp${item.harga.toLocaleString()}`}
-                        </SelectItem>
-                      ))}
-                    </Select>
+                    <Input
+                      isRequired
+                      value={formData.telp}
+                      onChange={handleChange}
+                      errorMessage={errors.telp}
+                      label={text("telp")}
+                      labelPlacement="outside"
+                      name="telp"
+                      placeholder="Enter your phone number"
+                      type="number"
+                    />
+                    <Input
+                      isRequired
+                      value={formData.date}
+                      onChange={handleChange}
+                      errorMessage={errors.date}
+                      label={text("date_booking")}
+                      labelPlacement="outside"
+                      name="date"
+                      // placeholder="Enter your phone number"
+                      type="date"
+                    />
+                    <p className="text-[12px] text-gray-500">
+                      {tersepi
+                        ? `Hari tersepi bulan ini: ${tersepi}`
+                        : "Tidak ada data hari tersepi untuk bulan ini."}
+                    </p>
                   </div>
-                  <Textarea
-                    isRequired
-                    value={formData.alamat}
-                    onChange={handleChange}
-                    errorMessage={errors.alamat}
-                    label="Address"
-                    labelPlacement="outside"
-                    name="alamat"
-                    placeholder={text("address")}
-                    minLength={10}
-                  />
+
+                  {/* Kolom Kanan */}
+                  <div className="flex flex-col gap-4">
+                    <Input
+                      isRequired
+                      value={localStorage.getItem("email")}
+                      onChange={handleChange}
+                      errorMessage={errors.email}
+                      label={text("email")}
+                      labelPlacement="outside"
+                      name="email"
+                      placeholder="Enter your email"
+                      type="email"
+                      readOnly
+                    />
+                    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                      <Select
+                        name="id_layanan"
+                        id="id_layanan"
+                        className="max-w-xs"
+                        label="Nama Layanan"
+                        placeholder="Pilih layanan"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            id_layanan: String(e.target.value),
+                          })
+                        }
+                      >
+                        {layanan.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {`${item.name} - Rp${item.harga.toLocaleString()}`}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </div>
+                    <Textarea
+                      isRequired
+                      value={formData.alamat}
+                      onChange={handleChange}
+                      errorMessage={errors.alamat}
+                      label="Address"
+                      labelPlacement="outside"
+                      name="alamat"
+                      placeholder={text("address")}
+                      minLength={10}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Tombol Submit */}
-            <div className="w-full flex justify-center items-center mt-6">
-              <Button
-                style={{ fontFamily: "Playfair Display" }}
-                className="w-1/2 md:w-1/4 bg-[#A68A64] text-white rounded-none"
-                type="submit"
-              >
-                {text("submit")}
-              </Button>
-            </div>
-          </Form>
+              {/* Tombol Submit */}
+              <div className="w-full flex justify-center items-center mt-6">
+                <Button
+                  style={{ fontFamily: "Playfair Display" }}
+                  className="w-1/2 md:w-1/4 bg-[#A68A64] text-white rounded-none"
+                  type="submit"
+                >
+                  {text("submit")}
+                </Button>
+              </div>
+            </Form>
+          </div>
         </div>
       </section>
 
