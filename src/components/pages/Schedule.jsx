@@ -31,37 +31,45 @@ const Schedule = () => {
     { value: 11, label: "November" },
     { value: 12, label: "Desember" },
   ];
-
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/schedule")
       .then((res) => {
+        console.log("Raw API Response:", res.data);
+        console.log("Schedule Data:", res.data.data);
         setData(res.data.data);
       })
       .catch((err) => {
         console.error("Gagal mengambil data schedule:", err);
       });
   }, []);
-
   useEffect(() => {
+    console.log("Filter useEffect triggered");
+    console.log("Selected Month:", selectedMonth);
+    console.log("Selected Year:", selectedYear);
+    console.log("Available Data:", data);
+    
     if (selectedMonth && selectedYear) {
       const match = data.find(
         (item) =>
           item.month === parseInt(selectedMonth) &&
           item.year === parseInt(selectedYear)
       );
+      console.log("Filtered Match Found:", match);
       setFilteredData(match || null);
     }
   }, [selectedMonth, selectedYear, data]);
 
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-
   const generateChartData = (data) => {
-    return days.map((day) => ({
+    console.log("Generating chart data for:", data);
+    const chartData = days.map((day) => ({
       name: day,
       value: data[`booking_${day.toLowerCase()}`] ?? 0,
       fill: getBarColor(day, data.tersibuk, data.tersepi),
     }));
+    console.log("Generated chart data:", chartData);
+    return chartData;
   };
 
   const getBarColor = (day, tersibuk, tersepi) => {
